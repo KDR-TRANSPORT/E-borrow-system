@@ -20,18 +20,21 @@ export default function ImageEdit({ onChange, value }) {
 
   const handleChange = (e) => {
     onChange(e);
-    setFileName(e.target.files[0].name);
+    const selectedFileName = e.target.files[0].name;
+    const truncatedFileName = selectedFileName.length > 15 ? selectedFileName.substring(0, 15) + "..." : selectedFileName;
+    setFileName(truncatedFileName);
   };
 
   console.log("dsas", value);
   return (
     <>
-      <div className="flex items-end space-x-2">
+      <div className="flex items-end space-x-2 ">
         <Button
           component="label"
           variant="contained"
           startIcon={<CloudUploadIcon />}
           color="success"
+          size="small"
         >
           Upload file
           <VisuallyHiddenInput
@@ -40,9 +43,10 @@ export default function ImageEdit({ onChange, value }) {
             onChange={(e) => handleChange(e)}
           />
         </Button>
-        <p>{fileName || value}</p>
+        <div className="">
+          <p>{fileName || value}</p>
+        </div>
       </div>
-      
     </>
   );
 }

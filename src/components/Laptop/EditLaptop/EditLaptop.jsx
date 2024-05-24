@@ -171,10 +171,6 @@ function EditLaptop() {
                 onDateChange={handleDateChange}
               />
             </div>
-            <div className="translate-y-[-2rem]">
-              {" "}
-              <ImageEdit onChange={handleFileChange} value={formData.picture} />
-            </div>
           </div>
           <hr className="mb-6" />
           <div className="space-x-6">
@@ -193,12 +189,17 @@ function EditLaptop() {
             </Link>
           </div>
         </form>
-        <div className="border-2 max-w-[400px] max-h-[400px] rounded-lg my-12 ml-[14rem]">
+        <div className="flex flex-col items-center space-y-20 max-w-[400px] max-h-[400px] rounded-lg my-20 ml-[14rem]">
           <img
             src={`http://192.168.0.145:8080/uploads/${formData["picture[]"]}`}
             alt={formData["picture[]"]}
             className="max-h-[400px] object-cover"
-          />
+          />{" "}
+          <div className="mt-10 flex items-center  space-x-10">
+            {" "}
+            <ImageEdit onChange={handleFileChange} value={formData.picture} />
+            <Button variant="contained" size="small">Save</Button>
+          </div>
         </div>
       </div>
     </div>
