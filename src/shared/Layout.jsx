@@ -186,9 +186,9 @@ export default function Layout() {
           <Divider />
           <List>
             {data.map((text, index) => (
-              <Link to={text.link}>
+              <Link to={text.link} key={index}>
                 <ListItem
-                  key={text.title}
+                  key={index}
                   disablePadding
                   sx={{ display: "block" }}
                 >

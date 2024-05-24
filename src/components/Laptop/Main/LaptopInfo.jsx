@@ -41,6 +41,35 @@ export default function LaptopInfo() {
     // แสดง modal ที่นี่
   };
 
+  async function Delete(e, id) {
+    e.preventDefault();
+    Swal.fire({
+      title: `Cofirm to delete this driver ?`,
+      icon: "question",
+      showCancelButton: true,
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .delete(import.meta.env.VITE_API_USER_PORT + `/deletedriver/${id}`)
+          .then((res) => {
+            console.log(res);
+            Swal.fire({
+              title: "Deleted Successfully",
+              icon: "success",
+            });
+            getDriverData();
+          })
+          .catch((res) => {
+            console.log(res);
+            Swal.fire({
+              title: "Unable to delete",
+              icon: "error",
+            });
+          });
+      }
+    });
+  }
+
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
     {
@@ -48,6 +77,17 @@ export default function LaptopInfo() {
       headerName: "Serial No.",
       width: 140,
       editable: false,
+    },
+    {
+      field: "created_at",
+      headerName: "Created Date",
+      width: 110,
+      editable: false,
+      valueGetter: (params) => {
+        // ใช้ `substring` กับค่าจากแถว (`row`) ของคอลัมน์ `date`
+        const dateValue = params;
+        return dateValue ? dateValue.substring(0, 10) : ""; // ใช้ substring และตรวจสอบว่าค่าของ date ไม่ใช่ undefined หรือ null
+      },
     },
     {
       field: "picture",
@@ -141,16 +181,23 @@ export default function LaptopInfo() {
       headerName: "Action",
       width: 80,
       filterable: false,
-      renderCell: (params) => (
-        <div className="flex space-x-2 my-4">
-          <Link href="#">
-            <RiEdit2Line size={18} className="text-sky-400" />
-          </Link>
-          <Link href="#">
-            <RiDeleteBin6Line className="text-red-400" size={18} />
-          </Link>
-        </div>
-      ),
+      renderCell: (params) => {
+        console.log(params);
+        return (
+          <div className="flex space-x-2 my-4">
+            <Link href="#">
+              <RiEdit2Line size={18} className="text-sky-400" />
+            </Link>
+            <Link href="#">
+              <RiDeleteBin6Line
+                className="text-red-400"
+                size={18}
+                // onClick={() => Delete(params)}
+              />
+            </Link>
+          </div>
+        );
+      },
     },
   ];
   return (
@@ -166,18 +213,18 @@ export default function LaptopInfo() {
       </div>
       <Box
         sx={{
-          height: "auto",
+          height: 550,
           width: "100%",
-          "& .active": {
-            backgroundColor: "#ffde59",
-            color: "#1a3e72",
-            fontWeight: "600",
-          },
-          "& .inactive": {
-            backgroundColor: "rgb(239 68 68)",
-            color: "black",
-            fontWeight: "600",
-          },
+          // "& .active": {
+          //   backgroundColor: "#ffde59",
+          //   color: "#1a3e72",
+          //   fontWeight: "600",
+          // },
+          // "& .inactive": {
+          //   backgroundColor: "rgb(239 68 68)",
+          //   color: "black",
+          //   fontWeight: "600",
+          // },
         }}
       >
         <DataGrid
