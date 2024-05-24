@@ -13,8 +13,8 @@ import Image from "./ComponentsAdd/Image";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
 import SaveIcon from "@mui/icons-material/Save";
+import { addLabtopData } from "../functions/data";
 
 function AddLaptop() {
   const navigate = useNavigate();
@@ -27,14 +27,11 @@ function AddLaptop() {
     fullbatterycapacity: "",
     currentbatterycapacity: "",
     diskperformance: "",
-    fullbatterycapacitydate: "2023-04-12",
-    currentbatterycapacitydate: "2023-04-12",
-    diskperformancedate: "2023-04-12",
     status: "",
     spec: "",
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     for (const key in formData) {
       if (!formData[key]) {
@@ -58,30 +55,37 @@ function AddLaptop() {
     }
 
     setIsloading(true);
-    axios
-      .post(`http://192.168.0.145:8080/api/laptops`, {
-        formData,
-      })
-      .then((response) => {
-        console.log("response", response);
-        if (response.statusText === "OK") {
+
+    const formDataNew = new FormData();
+    for (const key in formData) {
+      formDataNew.append(key, formData[key]);
+    }
+    console.log("formData:", formData);
+
+    try {
+      addLabtopData(formDataNew).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
           Swal.fire({
             position: "top",
             icon: "success",
-            title: "Your infomation has been saved",
+            title: "Your information has been saved",
             showConfirmButton: true,
           });
-          navigate("/");
         }
-      })
-      .catch((err) => {
-        Swal.fire({
-          title: "Error!",
-          text: "Fail to submit data.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+
+        navigate("/");
       });
+    } catch (error) {
+      console.error("Error:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Fail to submit data.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
 
     setIsloading(false);
   };
@@ -94,19 +98,18 @@ function AddLaptop() {
     });
   };
 
-  const handleFileChange = (e, fileName) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      "picture[]": fileName,
+      "picture[]": file,
     }));
   };
 
+  console.log(formData);
   const handleDateChange = (formattedDate) => {
     setFormData({ ...formData, warrantyexpirationdate: formattedDate });
   };
-
-
-  console.log("formData", formData);
 
   return (
     <div className="mx-16">
@@ -146,10 +149,9 @@ function AddLaptop() {
               onDateChange={handleDateChange}
             />
           </div>
-          <div className="flex space-x-32"></div>
           <div className="translate-y-[-2rem]">
             {" "}
-            <Image value={formData["picture[]"]} onChange={handleFileChange} />
+            <Image onChange={handleFileChange} />
           </div>
         </div>
         <hr className="mb-6" />
@@ -164,12 +166,12 @@ function AddLaptop() {
           >
             <span>Save</span>
           </LoadingButton>
-
           <Link to="/">
             <Button variant="outlined">Cancel</Button>
           </Link>
         </div>
       </form>
+      
     </div>
   );
 }

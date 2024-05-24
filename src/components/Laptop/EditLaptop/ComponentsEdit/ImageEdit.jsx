@@ -15,7 +15,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function Image({ onChange }) {
+export default function ImageEdit({ onChange, value }) {
   const [fileName, setFileName] = React.useState("");
 
   const handleChange = (e) => {
@@ -23,22 +23,26 @@ export default function Image({ onChange }) {
     setFileName(e.target.files[0].name);
   };
 
+  console.log("dsas", value);
   return (
-    <div className="flex items-end space-x-2">
-      <Button
-        component="label"
-        variant="contained"
-        startIcon={<CloudUploadIcon />}
-        color="success"
-      >
-        Upload file
-        <VisuallyHiddenInput
-          type="file"
-          name="picture[]"
-          onChange={(e) => handleChange(e)}
-        />
-      </Button>
-      <p>{fileName}</p>
-    </div>
+    <>
+      <div className="flex items-end space-x-2">
+        <Button
+          component="label"
+          variant="contained"
+          startIcon={<CloudUploadIcon />}
+          color="success"
+        >
+          Upload file
+          <VisuallyHiddenInput
+            type="file"
+            name="picture[]"
+            onChange={(e) => handleChange(e)}
+          />
+        </Button>
+        <p>{fileName || value}</p>
+      </div>
+      
+    </>
   );
 }

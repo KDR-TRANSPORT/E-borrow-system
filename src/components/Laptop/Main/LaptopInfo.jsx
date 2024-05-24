@@ -12,12 +12,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import { FaEye } from "react-icons/fa";
 import SetModal from "../Modal/SetModal";
 import { getLabtopsData } from "../functions/data";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function LaptopInfo() {
   const [allDataAll, setAlldataAll] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const navigate = useNavigate();
   async function getDataAll() {
     try {
       getLabtopsData().then((response) => {
@@ -31,36 +33,34 @@ export default function LaptopInfo() {
 
   useEffect(() => {
     setIsLoading(true);
-
     getDataAll();
   }, []);
-  console.log("alldata", allDataAll);
 
   const handleImageClick = (imageURL) => {
     setSelectedImage(imageURL);
     // แสดง modal ที่นี่
   };
 
-  async function Delete(e, id) {
+  async function Delete(e, id, serialNumber) {
     e.preventDefault();
+    console.log("id", id);
     Swal.fire({
-      title: `Cofirm to delete this driver ?`,
+      title: `Cofirm to delete this item (S/N:${serialNumber} ) ?`,
       icon: "question",
       showCancelButton: true,
     }).then((res) => {
       if (res.isConfirmed) {
         axios
-          .delete(import.meta.env.VITE_API_USER_PORT + `/deletedriver/${id}`)
+          .delete(`http://192.168.0.145:8080/api/laptops/${id}`)
           .then((res) => {
             console.log(res);
             Swal.fire({
               title: "Deleted Successfully",
               icon: "success",
             });
-            getDriverData();
+            getDataAll();
           })
           .catch((res) => {
-            console.log(res);
             Swal.fire({
               title: "Unable to delete",
               icon: "error",
@@ -69,6 +69,11 @@ export default function LaptopInfo() {
       }
     });
   }
+
+  const handleEdit = (e, id) => {
+    e.preventDefault();
+    navigate(`/editlaptop/${id}`);
+  };
 
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -96,8 +101,6 @@ export default function LaptopInfo() {
 
       editable: false,
       renderCell: (params) => {
-        console.log(params.value);
-
         return (
           <>
             <FaEye
@@ -145,24 +148,6 @@ export default function LaptopInfo() {
     },
 
     {
-      field: "fullbatterycapacitydate",
-      headerName: "Full Bat. Cap. Date",
-      width: 140,
-      editable: false,
-    },
-    {
-      field: "currentbatterycapacitydate",
-      headerName: "Current Bat. Cap. Date",
-      width: 170,
-      editable: false,
-    },
-    {
-      field: "diskperformancedate",
-      headerName: "Disk Perf. Date",
-      width: 140,
-      editable: false,
-    },
-    {
       field: "spec",
       headerName: "Spec",
       width: 180,
@@ -182,17 +167,20 @@ export default function LaptopInfo() {
       width: 80,
       filterable: false,
       renderCell: (params) => {
-        console.log(params);
         return (
           <div className="flex space-x-2 my-4">
             <Link href="#">
-              <RiEdit2Line size={18} className="text-sky-400" />
+              <RiEdit2Line
+                size={18}
+                className="text-sky-400"
+                onClick={(e) => handleEdit(e, params.id)}
+              />
             </Link>
             <Link href="#">
               <RiDeleteBin6Line
                 className="text-red-400"
                 size={18}
-                // onClick={() => Delete(params)}
+                onClick={(e) => Delete(e, params.id, params.row.serial_number)}
               />
             </Link>
           </div>

@@ -9,8 +9,6 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "full",
-  height: "auto",
-  maxHeight:"90%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -20,7 +18,7 @@ export default function SetModal({ selectedImage, setSelectedImage }) {
     <Modal open={Boolean(selectedImage)} onClose={() => setSelectedImage(null)}>
       <Box sx={style}>
         {" "}
-        <Image selectedImage={selectedImage} />
+        <Image selectedImage={selectedImage}/>
       </Box>
     </Modal>
   );
