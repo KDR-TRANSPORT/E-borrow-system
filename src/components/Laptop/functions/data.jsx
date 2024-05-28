@@ -20,7 +20,13 @@ export const addLabtopData = async (formDataNew) => {
 export const editLabtopData = async (id, formDataNew) => {
   return await axios.put(
     `http://192.168.0.145:8080/api/laptops/${id}`,
-    formDataNew,
+    formDataNew
+  );
+};
+export const addSingleImageLabtopData = async (id, formData) => {
+  return await axios.post(
+    `http://192.168.0.145:8080/api/laptopimages/${id}`,
+    formData,
     {
       headers: {
         "Content-Type": "multipart/form-data",

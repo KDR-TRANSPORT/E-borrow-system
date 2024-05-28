@@ -149,7 +149,7 @@ function AddLaptop() {
               onDateChange={handleDateChange}
             />
           </div>
-          <div className="translate-y-[-2rem]">
+          <div className="translate-y-[-1rem]">
             {" "}
             <Image onChange={handleFileChange} />
           </div>

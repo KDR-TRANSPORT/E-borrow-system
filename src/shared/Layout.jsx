@@ -116,7 +116,9 @@ export default function Layout() {
   const data = [
     { title: "Laptop", link: "/" },
     { title: "Equipments", link: "/equipments" },
+    { title: "Marked Equipment", link: "/markedequipment" },
   ];
+  
   return (
     <>
       <Box sx={{ display: "flex" }}>

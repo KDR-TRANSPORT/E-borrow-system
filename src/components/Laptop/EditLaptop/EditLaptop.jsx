@@ -5,8 +5,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import SaveIcon from "@mui/icons-material/Save";
 import LoadingButton from "@mui/lab/LoadingButton";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import BrandEdit from "./ComponentsEdit/BrandEdit";
-import { editLabtopData, getSingleLabtopsData } from "../functions/data";
+import {
+  addSingleImageLabtopData,
+  editLabtopData,
+  getSingleLabtopsData,
+} from "../functions/data";
 import SerialNumberEdit from "./ComponentsEdit/SerialNumberEdit";
 import FullBatteryCapacityEdit from "./ComponentsEdit/FullBatteryCapacityEdit";
 import CurrentBatteryCapacityEdit from "./ComponentsEdit/CurrentBatteryCapacityEdit";
@@ -15,6 +21,7 @@ import StatusEdit from "./ComponentsEdit/StatusEdit";
 import SpecEdit from "./ComponentsEdit/SpecEdit";
 import WarantyExpDateEdit from "./ComponentsEdit/WarantyExpDateEdit";
 import ImageEdit from "./ComponentsEdit/ImageEdit";
+import Alert from "@mui/material/Alert";
 
 function EditLaptop() {
   const { id } = useParams();
@@ -30,8 +37,11 @@ function EditLaptop() {
     diskperformance: "",
     status: "",
     spec: "",
-    "picture[]": null,
+    "picture[]": "",
   });
+
+  const [newImageFile, setNewImageFile] = useState(null);
+  const [newImageSuccess, setNewImageSuccess] = useState("");
 
   const getSingleData = () => {
     getSingleLabtopsData(id).then((res) => {
@@ -49,7 +59,6 @@ function EditLaptop() {
       }));
     });
   };
-  console.log("formData", formData);
   useEffect(() => {
     getSingleData();
   }, []);
@@ -67,27 +76,21 @@ function EditLaptop() {
         return;
       }
     }
-    if (!formData["picture[]"]) {
-      Swal.fire({
-        title: "Warning",
-        text: "กรอกกรุณา Upload รูปภาพ",
-        icon: "warning",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
 
     setIsloading(true);
 
-    const formDataNew = new FormData();
+    const formDataNew = {};
     for (const key in formData) {
-      formDataNew.append(key, formData[key]);
+      if (key !== "picture[]" && key !== "picture") {
+        formDataNew[key] = formData[key];
+      }
     }
-    console.log("formData:", formData);
+
+    console.log("formDataNew", formDataNew);
 
     try {
       await editLabtopData(id, formDataNew).then((res) => {
-        console.log("Response:", res.data);
+        console.log("res", res);
         Swal.fire({
           position: "top",
           icon: "success",
@@ -110,8 +113,6 @@ function EditLaptop() {
     setIsloading(false);
   };
 
-  console.log("formdata", formData);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -121,16 +122,61 @@ function EditLaptop() {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      "picture[]": file,
-    }));
+    const selectedFile = e.target.files[0];
+    setNewImageFile(selectedFile);
+    setFormData({
+      ...formData,
+      ["picture[]"]: selectedFile,
+    });
   };
 
   const handleDateChange = (formattedDate) => {
     setFormData({ ...formData, warrantyexpirationdate: formattedDate });
   };
+
+  const handleSubmitNewImage = (e) => {
+    e.preventDefault();
+    setIsloading(true);
+    if (!newImageFile && formData["picture[]"]) {
+      Swal.fire({
+        title: "Warning",
+        text: "คุณไม่ได้เลือกรูปภาพใหม่",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      setIsloading(false);
+
+      return;
+    }
+    if (!newImageFile && !formData["picture[]"]) {
+      Swal.fire({
+        title: "Warning",
+        text: "กรุณาเลือกรูปภาพ",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      setIsloading(false);
+
+      return;
+    }
+
+    addSingleImageLabtopData(id, formData)
+      .then((res) => {
+        console.log("res image", res);
+        setNewImageSuccess("Edited a new image sucessfully !");
+
+        setTimeout(() => {
+          setNewImageSuccess("");
+        }, 5000);
+
+        getSingleData();
+      })
+      .catch((err) => console.log("err", err));
+    setIsloading(false);
+  };
+
+  console.log("newFileimage", newImageFile);
+  console.log("formData", formData["picture[]"]);
 
   return (
     <div className="mx-16">
@@ -138,7 +184,7 @@ function EditLaptop() {
       <hr></hr>
       <div className="flex items-center">
         <form onSubmit={handleSubmit}>
-          <div className="mt-20  space-y-10 flex flex-col">
+          <div className="mt-10  space-y-10 flex flex-col">
             <div className="flex space-x-36">
               <SerialNumberEdit
                 value={formData.serial_number}
@@ -189,16 +235,45 @@ function EditLaptop() {
             </Link>
           </div>
         </form>
-        <div className="flex flex-col items-center space-y-20 max-w-[400px] max-h-[400px] rounded-lg my-20 ml-[14rem]">
-          <img
-            src={`http://192.168.0.145:8080/uploads/${formData["picture[]"]}`}
-            alt={formData["picture[]"]}
-            className="max-h-[400px] object-cover"
-          />{" "}
-          <div className="mt-10 flex items-center  space-x-10">
+        <div className="flex flex-col items-center space-y-10 max-w-[3400px]  rounded-lg   ml-[14rem] translate-y-[1rem]">
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <img
+              src={`http://192.168.0.145:8080/uploads/${formData["picture[]"]}`}
+              alt={`${
+                newImageFile
+                  ? "New image has been prepared"
+                  : formData["picture[]"]
+              }`}
+              className="h-[400px] object-cover border-2 border-black"
+            />
+          )}
+          {newImageSuccess && (
+            <div className="h-7 flex justify-center absolute top-[23.5rem] items-center rounded-lg">
+              <Alert severity="success">{newImageSuccess}</Alert>
+            </div>
+          )}
+
+          <div className=" flex items-center space-x-10  py-8">
             {" "}
-            <ImageEdit onChange={handleFileChange} value={formData.picture} />
-            <Button variant="contained" size="small">Save</Button>
+            <ImageEdit
+              onChange={handleFileChange}
+              value={formData["picture[]"]}
+              setNewImageFile={setNewImageFile}
+              newImageFile={newImageFile}
+            />
+            <LoadingButton
+              color="primary"
+              onClick={(e) => handleSubmitNewImage(e)}
+              loading={isLoading}
+              loadingPosition="start"
+              startIcon={<SaveIcon />}
+              variant="contained"
+              size="smal"
+            >
+              <span>Save</span>
+            </LoadingButton>
           </div>
         </div>
       </div>

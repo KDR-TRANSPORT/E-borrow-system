@@ -1,8 +1,7 @@
 import React from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
 
-function WarantyExpDateEdit({ value, onDateChange }) {
+function Date({ value, onDateChange }) {
   const handleChange = (value) => {
     const year = value.$y;
     const month = String(value.$M + 1).padStart(2, "0");
@@ -12,17 +11,14 @@ function WarantyExpDateEdit({ value, onDateChange }) {
   };
   return (
     <div className="relative">
-      <h1 className="font-semibold text-sm  absolute -top-6 left-1">
-        Wanranty Exp Date
-      </h1>
+      <h1 className="font-semibold text-sm  absolute -top-6 left-1">Date</h1>
       <DatePicker
-        name="warrantyexpirationdate"
+        name="date"
         onChange={handleChange}
         sx={{ width: 220 }}
-        value={dayjs(value)}
-        />
+      />
     </div>
   );
 }
 
-export default WarantyExpDateEdit;
+export default Date;

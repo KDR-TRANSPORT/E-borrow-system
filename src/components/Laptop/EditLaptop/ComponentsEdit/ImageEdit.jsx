@@ -15,36 +15,37 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function ImageEdit({ onChange, value }) {
-  const [fileName, setFileName] = React.useState("");
-
+export default function ImageEdit({
+  onChange,
+  value,
+  newImageFile,
+  setNewImageFile,
+}) {
   const handleChange = (e) => {
     onChange(e);
-    const selectedFileName = e.target.files[0].name;
-    const truncatedFileName = selectedFileName.length > 15 ? selectedFileName.substring(0, 15) + "..." : selectedFileName;
-    setFileName(truncatedFileName);
   };
 
-  console.log("dsas", value);
   return (
     <>
-      <div className="flex items-end space-x-2 ">
+      <div className="flex items-end justify-center space-x-2 ">
         <Button
           component="label"
           variant="contained"
           startIcon={<CloudUploadIcon />}
           color="success"
           size="small"
+          sx={{ width: 150 }}
         >
           Upload file
           <VisuallyHiddenInput
             type="file"
             name="picture[]"
+            accept="image/*"
             onChange={(e) => handleChange(e)}
           />
         </Button>
-        <div className="">
-          <p>{fileName || value}</p>
+        <div className="w-[200px] break-words">
+          <p className="text-xs">{newImageFile ? newImageFile.name : value}</p>
         </div>
       </div>
     </>
