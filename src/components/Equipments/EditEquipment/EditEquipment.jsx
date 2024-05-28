@@ -47,15 +47,17 @@ function EditEquipment() {
       }));
     });
   };
-  const getMarkedEquipmentData = () => {
-    getMarkedEquipmentData(id).then((res) => {
-      console.log("MarkedData", mres.data.data);
-    });
+  const getMarkedData = () => {
+    getMarkedEquipmentData(id)
+      .then((res) => {
+        console.log("MarkedData", res.data.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     getSingleData();
-    getMarkedEquipmentData();
+    getMarkedData();
   }, []);
 
   const handleSubmit = async (event) => {

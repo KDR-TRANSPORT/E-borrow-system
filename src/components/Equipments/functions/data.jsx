@@ -11,7 +11,7 @@ export const getMarkedEquipmentData = async (id) =>
 `);
 
 export const addEquipmentsData = async (formData) => {
-  return await axios.post(`http://192.168.0.145:8080/api/borrows`, formData);
+  return await axios.post(`http://192.168.0.145:8080/api/borrows`, [formData]);
 };
 export const editEquipmentsData = async (formData, id) => {
   return await axios.put(
