@@ -17,6 +17,7 @@ import EmployeeIdEdit from "./EditComponents/EmployeeIdEdit";
 import EmployeeNameEdit from "./EditComponents/EmployeeNameEdit";
 import EmployeePhoneEdit from "./EditComponents/EmployeePhoneEdit";
 import EmployeeRankEdit from "./EditComponents/EmployeeRankEdit";
+import BorrowedList from "./EditComponents/BorrowedList";
 
 function EditEquipment() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ function EditEquipment() {
     employee_dept: "",
     branch_id: null,
   });
+  const [markedData, setMarkedData] = useState([]);
 
   const getSingleData = () => {
     getSingleEquipmentData(id).then((res) => {
@@ -51,6 +53,7 @@ function EditEquipment() {
     getMarkedEquipmentData(id)
       .then((res) => {
         console.log("MarkedData", res.data.data);
+        setMarkedData(res.data.data);
       })
       .catch((err) => console.log(err));
   };
@@ -112,6 +115,8 @@ function EditEquipment() {
     setFormData({ ...formData, date: formattedDate });
   };
 
+  console.log('fromData', formData);
+
   return (
     <div className="mx-16">
       <h1 className="text-2xl font-bold my-6">Edit an equipment.</h1>
@@ -153,6 +158,15 @@ function EditEquipment() {
             <EmployeeBranchIdEdit
               value={formData.branch_id}
               onChange={handleChange}
+            />
+          </div>
+          <div>
+            <BorrowedList
+              markedData={markedData}
+              setMarkedData={setMarkedData}
+              getMarkedData={getMarkedData}
+              id={id}
+              getSingleData={getSingleData}
             />
           </div>
         </div>

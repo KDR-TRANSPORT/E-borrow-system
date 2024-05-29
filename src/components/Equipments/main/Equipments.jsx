@@ -52,12 +52,7 @@ function Equipments() {
             });
             getDataAll();
           })
-          .catch((res) => {
-            Swal.fire({
-              title: "Unable to delete",
-              icon: "error",
-            });
-          });
+          
       }
     });
   }
