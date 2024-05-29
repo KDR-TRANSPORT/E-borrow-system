@@ -7,16 +7,14 @@ function EmployeeRankEdit({ value, onChange }) {
   };
   return (
     <div className="relative">
-      <h1 className="font-semibold text-sm  absolute -top-6 left-1">
-    Rank
-      </h1>
+      <h1 className="font-semibold text-sm  absolute -top-6 left-1">Rank</h1>
       <TextField
         id="standard-basic"
         variant="outlined"
         size="small"
         name="employee_rank"
         onChange={handleChange}
-      value={value}
+        value={value}
       />
     </div>
   );

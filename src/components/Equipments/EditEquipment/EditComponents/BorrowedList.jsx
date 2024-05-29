@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 
 export default function BorrowedList({
   markedData,
-  setMarkedData,
   getMarkedData,
   id,
   getSingleData,
@@ -30,6 +29,7 @@ export default function BorrowedList({
   const [isEditing, setIsEditing] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
   const [returnStatus, setReturnStatus] = useState(null);
+
 
   useEffect(() => {
     const getCurrentDate = () => {
@@ -192,11 +192,11 @@ export default function BorrowedList({
     const formattedDate = `${year}-${month}-${day}`;
     setReturnedDate(formattedDate);
   };
-  console.log(";dsad", returnStatus);
-
+  // console.log(";returnStatus", returnStatus);
+console.log('markedData',markedData );
   return (
     <div>
-      <h1 className="font-bold">รายงานที่ยืม</h1>
+      <h1 className="font-bold">รายการที่ยืม</h1>
       {markedData.map((item, idx) => {
         return (
           <div key={idx} className="flex items-center space-x-8">

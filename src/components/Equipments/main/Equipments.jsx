@@ -51,8 +51,7 @@ function Equipments() {
               icon: "success",
             });
             getDataAll();
-          })
-          
+          });
       }
     });
   }
@@ -97,12 +96,6 @@ function Equipments() {
       width: 150,
       editable: false,
     },
-    {
-      field: "branch_id",
-      headerName: "Branch ID",
-      width: 100,
-      editable: false,
-    },
 
     {
       field: "branch_name",
@@ -112,8 +105,8 @@ function Equipments() {
     },
 
     {
-      field: "created_at",
-      headerName: "Created Date",
+      field: "date",
+      headerName: "Date",
       width: 140,
       editable: false,
       valueGetter: (params) => {
@@ -142,7 +135,9 @@ function Equipments() {
               <RiDeleteBin6Line
                 className="text-red-400"
                 size={18}
-                onClick={(e) => Delete(e, params.id, params.row.borrow_number_id)}
+                onClick={(e) =>
+                  Delete(e, params.id, params.row.borrow_number_id)
+                }
               />
             </Link>
           </div>
@@ -150,6 +145,8 @@ function Equipments() {
       },
     },
   ];
+
+  console.log("allDataAll", allDataAll);
   return (
     <div>
       <h1 className="text-2xl font-bold mt-6 mb-12">

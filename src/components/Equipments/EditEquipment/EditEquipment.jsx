@@ -32,11 +32,39 @@ function EditEquipment() {
     employee_dept: "",
     branch_id: null,
   });
-  const [markedData, setMarkedData] = useState([]);
+  const [markedData, setMarkedData] = useState([
+    {
+      id: 1,
+      device_name: "Laptop",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+    {
+      id: 2,
+      device_name: "Adaptor",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+    {
+      id: 3,
+      device_name: "Mouse",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+    {
+      id: 4,
+      device_name: "Bag",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+  ]);
 
   const getSingleData = () => {
     getSingleEquipmentData(id).then((res) => {
-      console.log(res.data);
       setFormData((prevData) => ({
         ...prevData,
         date: res.data.data.date,
@@ -115,7 +143,7 @@ function EditEquipment() {
     setFormData({ ...formData, date: formattedDate });
   };
 
-  console.log('fromData', formData);
+  console.log("fromData", formData);
 
   return (
     <div className="mx-16">
@@ -145,14 +173,14 @@ function EditEquipment() {
               onChange={handleChange}
             />
             <EmployeeRankEdit
-              value={formData.employee_dept}
+              value={formData.employee_rank}
               onChange={handleChange}
             />
           </div>
           <div className="flex space-x-24">
             {" "}
             <EmployeeDeptEdit
-              value={formData.employee_rank}
+              value={formData.employee_dept}
               onChange={handleChange}
             />
             <EmployeeBranchIdEdit

@@ -18,6 +18,7 @@ function DateEdit({ value, onDateChange }) {
         onChange={handleChange}
         sx={{ width: 220 }}
         value={dayjs(value)}
+        disabled
       />
     </div>
   );

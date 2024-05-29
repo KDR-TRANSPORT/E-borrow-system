@@ -74,8 +74,6 @@ function AddEquipment() {
       });
     }
   };
-
-  console.log(formData);
   const handleDateChange = (formattedDate) => {
     setFormData({ ...formData, date: formattedDate });
   };
