@@ -29,7 +29,7 @@ export default function BorrowedList({
   const [isEditing, setIsEditing] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
   const [returnStatus, setReturnStatus] = useState(null);
-
+  const [showAddButton, setShowAddButton] = useState(true);
 
   useEffect(() => {
     const getCurrentDate = () => {
@@ -76,10 +76,13 @@ export default function BorrowedList({
       device_name: input.device_name.trim() === "" ? "???" : input.device_name,
     };
   });
+  console.log("validatedInputs", validatedInputs);
 
+  // เพิ่มช่องใหม่ 1 ช่อง
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
+        
         "http://192.168.0.145:8080/api/borrowdevicearrays",
         validatedInputs
       );
@@ -96,6 +99,53 @@ export default function BorrowedList({
       ]);
       getMarkedData();
       getSingleData();
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    }
+  };
+
+  // เพิ่มช่องใหม่ 4 ช่อง default
+  const getDefaultMarkedData = async () => {
+    const defaultData = [
+      {
+        borrow_id: id,
+        device_name: "Laptop",
+        serial_number: "",
+        return_status: 0,
+        return_date: "",
+      },
+      {
+        borrow_id: id,
+        device_name: "Adaptor",
+        serial_number: "",
+        return_status: 0,
+        return_date: "",
+      },
+      {
+        borrow_id: id,
+        device_name: "Mouse",
+        serial_number: "",
+        return_status: 0,
+        return_date: "",
+      },
+      {
+        borrow_id: id,
+        device_name: "Bag",
+        serial_number: "",
+        return_status: 0,
+        return_date: "",
+      },
+    ];
+
+    try {
+      const response = await axios.post(
+        "http://192.168.0.145:8080/api/borrowdevicearrays",
+        defaultData
+      );
+      console.log("ddefautl", response.data.data);
+      setNewItems([...newItems, ...defaultData]);
+      getMarkedData();
+      setShowAddButton(false);
     } catch (error) {
       console.error("Error submitting data:", error);
     }
@@ -192,10 +242,11 @@ export default function BorrowedList({
     const formattedDate = `${year}-${month}-${day}`;
     setReturnedDate(formattedDate);
   };
-  // console.log(";returnStatus", returnStatus);
-console.log('markedData',markedData );
+
+  console.log("markedData", markedData);
   return (
     <div>
+      {showAddButton && <Button onClick={getDefaultMarkedData}>Add</Button>}
       <h1 className="font-bold">รายการที่ยืม</h1>
       {markedData.map((item, idx) => {
         return (
