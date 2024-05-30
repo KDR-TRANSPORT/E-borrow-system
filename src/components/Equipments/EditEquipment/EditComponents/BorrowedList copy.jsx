@@ -7,10 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import { Edit } from "@mui/icons-material";
 
 export default function BorrowedList({
   markedData,
@@ -18,22 +15,49 @@ export default function BorrowedList({
   id,
   getSingleData,
 }) {
-  const [newItems, setNewItems] = useState([]);
-  const [deviceName, setDeviceName] = useState("");
-  const [serialNumber, setSerialNumber] = useState("");
+  const [markedInfo, setMarkedInfo] = useState(markedData);
+
+  // เพิ่มช่องใหม่
   const [inputs, setInputs] = useState([
-    // {
-    //   device_name: "",
-    //   serial_number: "",
-    //   return_status: false,
-    //   borrow_id: Number(id),
-    // },
+    {
+      device_name: "",
+      serial_number: "",
+      return_status: false,
+      borrow_id: Number(id),
+    },
   ]);
+
+  // ส่งไป post แบบหลายตัว
+  const [editData, setEditData] = useState(
+    Array(markedData.length).fill({
+      id: "",
+      serial_number: "",
+      device_name: "",
+      return_date: "",
+      return_status: null,
+    })
+  );
+
+  useEffect(() => {
+    setMarkedInfo(markedData);
+
+    setEditData(
+      markedData.map((item) => ({
+        id: item.id,
+        serial_number: item.serial_number,
+        device_name: item.device_name,
+        return_date: item.return_date,
+        return_status: item.return_status,
+      }))
+    );
+  }, [markedData]);
+
+  const [newItems, setNewItems] = useState([]);
   const [returnedDate, setReturnedDate] = useState("");
-  const [editId, setEditID] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
   const [returnStatus, setReturnStatus] = useState(null);
+  const [showAddButton, setShowAddButton] = useState(true);
 
   useEffect(() => {
     const getCurrentDate = () => {
@@ -66,18 +90,9 @@ export default function BorrowedList({
 
   const handleInputChange = (index, event) => {
     const { name, value } = event.target;
-    console.log("", value);
-    let updatedInputs;
-    if (name === "device_name" && value === "อื่นๆ") {
-      // ถ้าเลือก "อื่นๆ" ให้สร้างฟิลด์ใหม่ที่ให้กรอกข้อความ
-      updatedInputs = inputs.map((input, idx) =>
-        idx === index ? { ...input, [name]: value } : input
-      );
-    } else {
-      updatedInputs = inputs.map((input, idx) =>
-        idx === index ? { ...input, [name]: value } : input
-      );
-    }
+    const updatedInputs = inputs.map((input, idx) =>
+      idx === index ? { ...input, [name]: value } : input
+    );
     setInputs(updatedInputs);
   };
 
@@ -109,7 +124,6 @@ export default function BorrowedList({
           borrow_id: id,
         },
       ]);
-      setInputs([]);
       getMarkedData();
       getSingleData();
     } catch (error) {
@@ -158,35 +172,23 @@ export default function BorrowedList({
       console.log("ddefautl", response.data.data);
       setNewItems([...newItems, ...defaultData]);
       getMarkedData();
+      setShowAddButton(false);
     } catch (error) {
       console.error("Error submitting data:", error);
     }
   };
 
+
+  
   const returnedSubmit = async (e, item) => {
     const { device_name, serial_number, return_date, id } = item;
-
-    let submissionData = {};
-    // กรณีต้องการเปลี่ยนเป็นคืนแล้ว
-    if (item.return_status === 0) {
-      submissionData = {
-        device_name,
-        serial_number,
-        return_status: 1,
-        return_date: currentDate,
-        id,
-      };
-    } else if (item.return_status === 1) {
-      // กรณีต้องการเปลี่ยนเป็นยังไม่คืน
-      submissionData = {
-        device_name,
-        serial_number,
-        return_status: 0,
-        return_date: "",
-        id,
-      };
-    }
-
+    const submissionData = {
+      device_name,
+      serial_number,
+      return_status: 1,
+      return_date: currentDate,
+      id,
+    };
     console.log("submissionData", submissionData);
 
     try {
@@ -216,24 +218,50 @@ export default function BorrowedList({
       console.error("Error submitting data:", error);
     }
   };
+  const handleEditDataChange = (e, idx, item) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("value", value, idx);
+    console.log("device_name", item.device_name, idx);
 
-  const editBorrowedDevices = async (e, item) => {
-    const { id, device_name, return_status, serial_number } = item;
-    // Prepare the submit data
-    const submitData = {
-      id: id,
-      serial_number: serialNumber || serial_number,
-      device_name: deviceName || device_name,
-      return_status: return_status,
-      return_date: returnedDate,
-    };
+    setEditData((prevEditData) => {
+      const updatedEditData = [...prevEditData];
+      updatedEditData[idx] = {
+        ...updatedEditData[idx],
+        id: item.id,
+        serial_number: value || "",
+        device_name: value || "",
+        return_date: item.return_date || "",
+        return_status: item.return_status,
+      };
+      return updatedEditData;
+    });
+  };
 
-    console.log("submitData", submitData);
-
+  console.log("editData", editData);
+  const editBorrowedDevices = async (e) => {
+    e.preventDefault();
     try {
+      // ตรวจสอบและแก้ไข editData ก่อนที่จะส่งไปยังเซิร์ฟเวอร์
+      const readyData = editData.map((item) => {
+        // ถ้า return_date เป็น null ให้เปลี่ยนเป็นค่าว่าง
+        if (item.return_date === null || item.return_date === "") {
+          item.return_date = "1993-12-05";
+        }
+        // ถ้า serial_number เป็น null ให้เปลี่ยนเป็นค่าว่าง
+        if (item.serial_number === null) {
+          item.serial_number = "";
+        }
+        // if (item.return_status === 0) {
+        //   item.return_status= 1;
+        // }
+        return item;
+      });
+
+      console.log("readyData", readyData);
       const response = await axios.put(
         `http://192.168.0.145:8080/api/borrowdevicearrays`,
-        [submitData]
+        readyData
       );
       console.log(response.data);
       await getSingleData();
@@ -241,17 +269,23 @@ export default function BorrowedList({
 
       setIsEditing(false);
       // Clear inputs after submitting
-      setInputs([]);
+      setInputs([
+        {
+          device_name: "",
+          serial_number: "",
+          return_status: false,
+          borrow_id: null,
+        },
+      ]);
+      setEditData([]);
     } catch (error) {
       console.error("Error submitting data:", error);
     }
   };
 
-  const handleEditClick = async (e, itemId, serialNumber) => {
+  const handleEditClick = async (e) => {
     e.preventDefault();
-    console.log("itemId:", itemId); // Log ค่า itemId
     setIsEditing((prevIsEditing) => !prevIsEditing);
-    setEditID(itemId);
   };
 
   // จัดการ datePickter
@@ -263,18 +297,29 @@ export default function BorrowedList({
     setReturnedDate(formattedDate);
   };
 
-  console.log("markedData", markedData);
   return (
     <div>
-      {markedData.length === 0 && (
-        <Button onClick={getDefaultMarkedData}>Add</Button>
-      )}
+      {showAddButton && <Button onClick={getDefaultMarkedData}>Add</Button>}
       <h1 className="font-bold">รายการที่ยืม</h1>
+      {isEditing ? (
+        <>
+          <Button onClick={editBorrowedDevices}>บันทึก</Button>
+          <Button onClick={() => setIsEditing(false)}>ยกเลิก</Button>
+        </>
+      ) : (
+        <Button
+          onClick={(e) => {
+            handleEditClick(e);
+          }}
+        >
+          แก้ไข
+        </Button>
+      )}
       {markedData.map((item, idx) => {
         return (
           <div key={idx} className="flex items-center space-x-8">
             <div>
-              {editId === item.id && isEditing ? (
+              {isEditing ? (
                 <>
                   <span>1.</span>
                   <TextField
@@ -284,24 +329,25 @@ export default function BorrowedList({
                     name="device_name"
                     // value={serialNumber}
                     defaultValue={item.device_name}
-                    onChange={(e) => setDeviceName(e.target.value)}
+                    onChange={(e) => handleEditDataChange(e, idx, item)}
                   />
                 </>
               ) : (
-                <>
-                  <span>{idx + 1}.</span> <p>{item.device_name}</p>
-                </>
+                <span>
+                  {idx + 1}. {item.device_name}
+                </span>
               )}
             </div>
             <div className="">
-              {editId === item.id && isEditing ? (
+              {isEditing ? (
                 <TextField
                   id="standard-basic"
                   variant="outlined"
                   size="small"
                   name="serial_number"
+                  // value={serialNumber}
                   defaultValue={item.serial_number}
-                  onChange={(e) => setSerialNumber(e.target.value)}
+                  onChange={(e) => handleEditDataChange(e, idx, item)}
                 />
               ) : (
                 <span>{item.serial_number}</span>
@@ -310,10 +356,7 @@ export default function BorrowedList({
             <div className="flex items-center">
               <Button
                 onClick={(e) => returnedSubmit(e, item)}
-                disabled={
-                  editId === item.id && isEditing
-                  // item.return_status === 1 || (editId === item.id && isEditing)
-                }
+                disabled={isEditing}
               >
                 {item.return_status === 0 ? (
                   <p className="text-red-500">ยังไม่คืน</p>
@@ -323,84 +366,46 @@ export default function BorrowedList({
               </Button>
 
               <p>{item.return_date}</p>
-
-              {editId === item.id && isEditing ? (
-                <>
-                  <Button onClick={(e) => editBorrowedDevices(e, item)}>
-                    บันทึก
-                  </Button>
-                  <Button onClick={() => setIsEditing(false)}>ยกเลิก</Button>
-                </>
-              ) : (
-                <Button
-                  onClick={(e) => {
-                    handleEditClick(e, item.id, item.serial_number);
-                  }}
-                >
-                  แก้ไข
-                </Button>
-              )}
             </div>
           </div>
         );
       })}
       <div className="my-4">
         <h2 className="font-bold">เพิ่มใหม่</h2>
-        {inputs.map((input, idx) => {
-          console.log("input device_name", input.device_name);
-
-          return (
-            <div key={idx} className="flex items-center space-x-8 my-2">
-              <FormControl sx={{ width: 180 }}>
-                <InputLabel id="demo-simple-select-label">Others</InputLabel>
-
-                <Select
-                  labelId="demo-simple-select-label"
-                  label="Others"
-                  name="device_name"
-                  id={`device_name-${idx}`}
-                  onChange={(e) => handleInputChange(idx, e)}
-                >
-                  {" "}
-                  <MenuItem disabled>Select...</MenuItem>
-                  <MenuItem value="เปลี่ยน Laptop">เปลี่ยน Laptop</MenuItem>
-                  <MenuItem value="เปลี่ยน Adaptor">เปลี่ยน Adaptor</MenuItem>
-                  <MenuItem value="เปลี่ยน Mouse">เปลี่ยน Mouse</MenuItem>
-                  <MenuItem value="เปลี่ยน กระเป๋า">เปลี่ยน กระเป๋า</MenuItem>
-                  <MenuItem value="อื่นๆ">อื่นๆ</MenuItem>
-                </Select>
-              </FormControl>
-
-              {input.device_name !== "เปลี่ยน Laptop" &&
-                input.device_name !== "เปลี่ยน Adaptor" &&
-                input.device_name !== "เปลี่ยน Mouse" &&
-                input.device_name !== "เปลี่ยน กระเป๋า" &&
-                input.device_name !== "" && (
-                  <TextField
-                    id={`other_device-${idx}`}
-                    variant="outlined"
-                    size="small"
-                    name="device_name"
-                    label="อื่นๆ"
-                    onChange={(e) => handleInputChange(idx, e)}
-                  />
-                )}
-              <TextField
-                id={`serial_number-${idx}`}
-                variant="outlined"
-                size="small"
-                name="serial_number"
-                label="Serial Number"
-                value={input.serial_number}
-                onChange={(e) => handleInputChange(idx, e)}
-              />
-              <Button onClick={() => handleRemoveInput(idx)}>ลบ</Button>
-            </div>
-          );
-        })}
+        {inputs.map((input, idx) => (
+          <div key={idx} className="flex items-center space-x-8 my-2">
+            <TextField
+              id={`device_name-${idx}`}
+              variant="outlined"
+              size="small"
+              name="device_name"
+              label="Device Name"
+              value={input.device_name}
+              onChange={(e) => handleInputChange(idx, e)}
+            />
+            <TextField
+              id={`serial_number-${idx}`}
+              variant="outlined"
+              size="small"
+              name="serial_number"
+              label="Serial Number"
+              value={input.serial_number}
+              onChange={(e) => handleInputChange(idx, e)}
+            />
+            <Button onClick={() => handleRemoveInput(idx)}>ลบ</Button>
+          </div>
+        ))}
         <Button onClick={handleAddInput}>เพิ่ม</Button>
         <Button onClick={handleSubmit}>ส่ง</Button>
       </div>
     </div>
   );
 }
+
+// const handleChange = (index, value) => {
+//   setTextFields((prevState) => {
+//     const updatedFields = [...prevState];
+//     updatedFields[index] = { ...updatedFields[index], detail: value };
+//     return updatedFields;
+//   });
+// };

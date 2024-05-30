@@ -18,7 +18,7 @@ import EmployeeNameEdit from "./EditComponents/EmployeeNameEdit";
 import EmployeePhoneEdit from "./EditComponents/EmployeePhoneEdit";
 import EmployeeRankEdit from "./EditComponents/EmployeeRankEdit";
 import BorrowedList from "./EditComponents/BorrowedList";
-
+import BorrowedListSec from "./EditComponents/BorrowedList copy";
 function EditEquipment() {
   const navigate = useNavigate();
   const [isLoading, setIsloading] = useState(false);
@@ -32,7 +32,36 @@ function EditEquipment() {
     employee_dept: "",
     branch_id: null,
   });
-  const [markedData, setMarkedData] = useState([]);
+  const [markedData, setMarkedData] = useState([
+    {
+      borrow_id: 1,
+      device_name: "Laptop",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+    {
+      borrow_id: 2,
+      device_name: "Adaptor",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+    {
+      borrow_id: 3,
+      device_name: "Mouse",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+    {
+      borrow_id: id,
+      device_name: "Bag",
+      serial_number: "",
+      return_status: 0,
+      return_date: "",
+    },
+  ]);
 
   const getSingleData = () => {
     getSingleEquipmentData(id).then((res) => {
@@ -160,7 +189,7 @@ function EditEquipment() {
             />
           </div>
           <div>
-            <BorrowedList
+            <BorrowedList 
               markedData={markedData}
               setMarkedData={setMarkedData}
               getMarkedData={getMarkedData}
