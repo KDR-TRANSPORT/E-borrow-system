@@ -66,47 +66,47 @@ function Equipments() {
     },
     {
       field: "employee_id",
-      headerName: "Employee ID",
+      headerName: "รหัสพนักงาน",
       width: 110,
       editable: false,
     },
 
     {
       field: "employee_name",
-      headerName: "Name",
+      headerName: "ชื่อ",
       width: 150,
       editable: false,
     },
     {
       field: "employee_phone",
-      headerName: "Phone",
+      headerName: "มือถือ",
       width: 150,
       editable: false,
     },
     {
       field: "employee_rank",
-      headerName: "Rank",
+      headerName: "ตำแหน่ง",
       width: 150,
       editable: false,
     },
 
     {
       field: "employee_dept",
-      headerName: "Dept",
+      headerName: "แผนก",
       width: 150,
       editable: false,
     },
 
     {
       field: "branch_name",
-      headerName: "Branch",
+      headerName: "สาขา",
       width: 120,
       editable: false,
     },
 
     {
       field: "date",
-      headerName: "Date",
+      headerName: "วันที่ยืม",
       width: 140,
       editable: false,
       valueGetter: (params) => {
@@ -150,13 +150,13 @@ function Equipments() {
   return (
     <div>
       <h1 className="text-2xl font-bold mt-6 mb-12">
-        Borrowing Return Equipments
+        การจัดการยืมคืนอุปกรณ์
       </h1>
       <div className="my-6">
         <Link to="/addequipment">
           {" "}
           <Button variant="contained" startIcon={<AddIcon />}>
-            Add equipment
+            เพิ่มอุปกรณ์
           </Button>
         </Link>
       </div>

@@ -36,7 +36,7 @@ export default function ImageEdit({
           size="small"
           sx={{ width: 150 }}
         >
-          Upload file
+          อัพโหลดรูปภาพ
           <VisuallyHiddenInput
             type="file"
             name="picture[]"

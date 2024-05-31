@@ -8,7 +8,7 @@ function SpecEdit({ value, onChange }) {
   return (
     <div className="relative">
       <h1 className="font-semibold  absolute -top-6 left-1 text-sm ">
-        Specification
+      สเปคเครื่อง
       </h1>
       <TextField
         id="outlined-multiline-static"

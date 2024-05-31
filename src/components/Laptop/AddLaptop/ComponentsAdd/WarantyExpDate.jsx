@@ -12,7 +12,7 @@ function WarantyExpDate({ value, onDateChange }) {
   return (
     <div className="relative">
       <h1 className="font-semibold text-sm  absolute -top-6 left-1">
-        Wanranty Exp Date
+        วันหมดประกัน
       </h1>
       <DatePicker name="warrantyexpirationdate" onChange={handleChange} sx={{width:220}} />
     </div>

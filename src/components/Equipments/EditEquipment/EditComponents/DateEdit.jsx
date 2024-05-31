@@ -12,7 +12,7 @@ function DateEdit({ value, onDateChange }) {
   };
   return (
     <div className="relative">
-      <h1 className="font-semibold text-sm  absolute -top-6 left-1">Date</h1>
+      <h1 className="font-semibold text-sm  absolute -top-6 left-1">วันที่ยืม</h1>
       <DatePicker
         name="date"
         onChange={handleChange}

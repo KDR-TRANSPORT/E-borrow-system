@@ -8,7 +8,7 @@ function EmployeeNameEdit({ value, onChange }) {
   return (
     <div className="relative">
       <h1 className="font-semibold text-sm  absolute -top-6 left-1">
-       Name
+        ชื่อ-นามสกุล พนักงาน
       </h1>
       <TextField
         id="standard-basic"
@@ -17,6 +17,7 @@ function EmployeeNameEdit({ value, onChange }) {
         name="employee_name"
         onChange={handleChange}
         value={value}
+        sx={{ width: 350 }}
       />
     </div>
   );

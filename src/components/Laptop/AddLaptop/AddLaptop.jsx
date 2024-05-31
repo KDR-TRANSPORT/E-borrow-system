@@ -113,7 +113,7 @@ function AddLaptop() {
 
   return (
     <div className="mx-16">
-      <h1 className="text-2xl font-bold my-6">Add a laptop.</h1>
+      <h1 className="text-2xl font-bold my-6">เพิ่มข้อมูลโน้ตบุ้ค</h1>
       <hr></hr>
       <form onSubmit={handleSubmit}>
         <div className="mt-20  space-y-10 flex flex-col">
@@ -164,10 +164,10 @@ function AddLaptop() {
             variant="contained"
             type="submit"
           >
-            <span>Save</span>
+            <span>บันทึก</span>
           </LoadingButton>
           <Link to="/">
-            <Button variant="outlined">Cancel</Button>
+            <Button variant="outlined">ยกเลิก</Button>
           </Link>
         </div>
       </form>

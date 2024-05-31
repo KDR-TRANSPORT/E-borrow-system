@@ -9,7 +9,7 @@ function SerialNumberEdit({ value, onChange }) {
   return (
     <div className="relative">
       <h1 className="font-semibold text-sm  absolute -top-6 left-1">
-        Serial no.
+      หมายเลขเครื่อง
       </h1>
       <TextField
         id="standard-basic"

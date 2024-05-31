@@ -76,13 +76,13 @@ export default function LaptopInfo() {
     { field: "id", headerName: "ID", width: 50 },
     {
       field: "serial_number",
-      headerName: "Serial No.",
+      headerName: "หมายเลขเครื่อว",
       width: 140,
       editable: false,
     },
     {
       field: "created_at",
-      headerName: "Created Date",
+      headerName: "วันที่สร้าง",
       width: 110,
       editable: false,
       valueGetter: (params) => {
@@ -93,7 +93,7 @@ export default function LaptopInfo() {
     },
     {
       field: "picture",
-      headerName: "Image",
+      headerName: "รูปภาพ",
       width: 80,
 
       editable: false,
@@ -114,46 +114,46 @@ export default function LaptopInfo() {
     },
     {
       field: "brand",
-      headerName: "Brand",
+      headerName: "ยี่ห้อ",
       width: 140,
       editable: false,
     },
     {
       field: "warrantyexpirationdate",
-      headerName: "Warranty Exp.",
+      headerName: "วันหมดประกัน",
       width: 140,
       editable: false,
     },
     {
       field: "fullbatterycapacity",
-      headerName: "Full Bat. Cap.",
+      headerName: "ความจุแบตเต็ม",
       width: 140,
       editable: false,
     },
 
     {
       field: "currentbatterycapacity",
-      headerName: "Current Bat. Cap.",
+      headerName: "ความจุแบตปัจุบัน",
       width: 140,
       editable: false,
     },
     {
       field: "diskperformance",
-      headerName: "Disk Perf.",
+      headerName: "ประสิทธิภาพดิสก์",
       width: 140,
       editable: false,
     },
 
     {
       field: "spec",
-      headerName: "Spec",
+      headerName: "สเปคเครื่อง",
       width: 180,
       editable: false,
     },
 
     {
       field: "status",
-      headerName: "Status",
+      headerName: "สถานะการใช้งาน",
       width: 140,
       editable: false,
     },
@@ -187,12 +187,12 @@ export default function LaptopInfo() {
   ];
   return (
     <div className="">
-      <h1 className="text-2xl font-bold mt-6 mb-12">All Laptops</h1>
+      <h1 className="text-2xl font-bold mt-6 mb-12">ข้อมูลโน้ตบุ้คทั้งหมด</h1>
       <div className="my-6">
         <Link to="/addlaptop">
           {" "}
           <Button variant="contained" startIcon={<AddIcon />}>
-            Add laptop
+          เพิ่มข้อมูลโน้ตบุ้ค
           </Button>
         </Link>
       </div>

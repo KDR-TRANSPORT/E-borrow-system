@@ -11,6 +11,12 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveAsIcon from "@mui/icons-material/SaveAs";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function BorrowedList({
   markedData,
@@ -166,6 +172,7 @@ export default function BorrowedList({
   const returnedSubmit = async (e, item) => {
     const { device_name, serial_number, return_date, id } = item;
 
+    console.log("idxxx", id);
     let submissionData = {};
     // กรณีต้องการเปลี่ยนเป็นคืนแล้ว
     if (item.return_status === 0) {
@@ -182,7 +189,7 @@ export default function BorrowedList({
         device_name,
         serial_number,
         return_status: 0,
-        return_date: "",
+        return_date: "1993-12-05",
         id,
       };
     }
@@ -191,7 +198,7 @@ export default function BorrowedList({
 
     try {
       Swal.fire({
-        title: `ยืนยันการคืนของ (${device_name}, SN-${serial_number})
+        title: `ต้องการแก้ไขการคืนของ (${device_name}, SN-${serial_number})
           ใช่หรือไม่ ?`,
         icon: "question",
         showCancelButton: true,
@@ -208,9 +215,10 @@ export default function BorrowedList({
         })
         .catch((error) => {
           Swal.fire({
-            title: "Unable to delete",
+            title: "Fail",
             icon: "error",
           });
+          console.error("Error:", error);
         });
     } catch (error) {
       console.error("Error submitting data:", error);
@@ -264,19 +272,40 @@ export default function BorrowedList({
   };
 
   console.log("markedData", markedData);
+  console.log("inputs", inputs);
   return (
     <div>
       {markedData.length === 0 && (
-        <Button onClick={getDefaultMarkedData}>Add</Button>
+        <Button
+          onClick={getDefaultMarkedData}
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
+          เพิ่มอุปกรณ์(4)
+        </Button>
       )}
-      <h1 className="font-bold">รายการที่ยืม</h1>
+      <div className="flex items-center space-x-4 mt-10">
+        {" "}
+        <h1 className="font-bold">รายการที่ยืม</h1>
+        <IconButton aria-label="delete" size="small">
+          <AddCircleIcon
+            fontSize="small"
+            onClick={handleAddInput}
+            color="primary"
+          />
+        </IconButton>
+      </div>
+
       {markedData.map((item, idx) => {
         return (
-          <div key={idx} className="flex items-center space-x-8">
-            <div>
+          <div
+            key={idx}
+            className="grid  grid-cols-[10%_15%_30%] space-y-4 space-x-12"
+          >
+            <div className="flex items-center">
               {editId === item.id && isEditing ? (
-                <>
-                  <span>1.</span>
+                <div className="flex mt-4">
+                  <span className="mt-2 mr-2">{idx+1}.</span>
                   <TextField
                     id="standard-basic"
                     variant="outlined"
@@ -286,11 +315,11 @@ export default function BorrowedList({
                     defaultValue={item.device_name}
                     onChange={(e) => setDeviceName(e.target.value)}
                   />
-                </>
+                </div>
               ) : (
-                <>
-                  <span>{idx + 1}.</span> <p>{item.device_name}</p>
-                </>
+                <div className="flex space-x-2 items-center mt-6">
+                  <span>{idx + 1}. </span> <p> {item.device_name}</p>
+                </div>
               )}
             </div>
             <div className="">
@@ -304,65 +333,103 @@ export default function BorrowedList({
                   onChange={(e) => setSerialNumber(e.target.value)}
                 />
               ) : (
-                <span>{item.serial_number}</span>
+                <div className="flex space-x-2 mt-3">
+                  <span className="font-semibold">S/N: </span>{" "}
+                  <span>{item.serial_number}</span>
+                </div>
               )}
             </div>
-            <div className="flex items-center">
-              <Button
-                onClick={(e) => returnedSubmit(e, item)}
-                disabled={
-                  editId === item.id && isEditing
-                  // item.return_status === 1 || (editId === item.id && isEditing)
-                }
-              >
-                {item.return_status === 0 ? (
-                  <p className="text-red-500">ยังไม่คืน</p>
-                ) : (
-                  <p className="text-green-500">คืนแล้ว</p>
-                )}
-              </Button>
-
-              <p>{item.return_date}</p>
-
-              {editId === item.id && isEditing ? (
-                <>
-                  <Button onClick={(e) => editBorrowedDevices(e, item)}>
-                    บันทึก
-                  </Button>
-                  <Button onClick={() => setIsEditing(false)}>ยกเลิก</Button>
-                </>
+            <div className="flex items-center space-x-4">
+              {item.return_status === 0 ? (
+                <Button
+                  onClick={(e) => returnedSubmit(e, item)}
+                  disabled={editId === item.id && isEditing}
+                  sx={{ backgroundColor: "red", color: "", padding: 1 }}
+                  size="smal"
+                >
+                  {" "}
+                  <p className="">คืน</p>
+                </Button>
               ) : (
                 <Button
-                  onClick={(e) => {
-                    handleEditClick(e, item.id, item.serial_number);
-                  }}
+                  onClick={(e) => returnedSubmit(e, item)}
+                  disabled={editId === item.id && isEditing}
+                  sx={{ backgroundColor: "green", color: "white", padding: 1 }}
+                  size="smal"
                 >
-                  แก้ไข
+                  {" "}
+                  <p className="">คืน</p>
                 </Button>
+              )}
+              <p className="underline">
+                {item.return_date ? (
+                  <p className="">{item.return_date}</p>
+                ) : (
+                  <p className="mr-[5.2rem]"></p>
+                )}
+              </p>
+              {editId === item.id && isEditing ? (
+                <div className="flex space-x-2 ml-6">
+                  <Button
+                    onClick={(e) => editBorrowedDevices(e, item)}
+                    startIcon={<SaveAsIcon />}
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginLeft: 10 }}
+                  >
+                    บันทึก
+                  </Button>
+                  <Button
+                    onClick={() => setIsEditing(false)}
+                    variant="outlined"
+                  >
+                    ยกเลิก
+                  </Button>
+                </div>
+              ) : (
+                <div className="">
+                  <Button
+                    onClick={(e) => {
+                      handleEditClick(e, item.id, item.serial_number);
+                    }}
+                    startIcon={<EditIcon />}
+                    sx={{
+                      backgroundColor: "#ffef62",
+                      color: "black",
+                      padding: 1,
+                      marginLeft: 10,
+                    }}
+                  >
+                    แก้ไข
+                  </Button>
+                </div>
               )}
             </div>
           </div>
         );
       })}
       <div className="my-4">
-        <h2 className="font-bold">เพิ่มใหม่</h2>
+        {/* <h2 className="font-bold">เพิ่มใหม่</h2> */}
         {inputs.map((input, idx) => {
           console.log("input device_name", input.device_name);
 
           return (
             <div key={idx} className="flex items-center space-x-8 my-2">
               <FormControl sx={{ width: 180 }}>
-                <InputLabel id="demo-simple-select-label">Others</InputLabel>
+                <InputLabel id="demo-simple-select-label">
+                  เลือกอื่นๆ
+                </InputLabel>
 
                 <Select
                   labelId="demo-simple-select-label"
-                  label="Others"
+                  label="เลือกอื่นๆ..."
                   name="device_name"
                   id={`device_name-${idx}`}
                   onChange={(e) => handleInputChange(idx, e)}
+                  size="small"
                 >
                   {" "}
-                  <MenuItem disabled>Select...</MenuItem>
+                  <MenuItem disabled>เลือก...</MenuItem>
                   <MenuItem value="เปลี่ยน Laptop">เปลี่ยน Laptop</MenuItem>
                   <MenuItem value="เปลี่ยน Adaptor">เปลี่ยน Adaptor</MenuItem>
                   <MenuItem value="เปลี่ยน Mouse">เปลี่ยน Mouse</MenuItem>
@@ -381,25 +448,43 @@ export default function BorrowedList({
                     variant="outlined"
                     size="small"
                     name="device_name"
-                    label="อื่นๆ"
+                    label="ชื่ออุปกรณ์"
                     onChange={(e) => handleInputChange(idx, e)}
                   />
                 )}
-              <TextField
-                id={`serial_number-${idx}`}
-                variant="outlined"
-                size="small"
-                name="serial_number"
-                label="Serial Number"
-                value={input.serial_number}
-                onChange={(e) => handleInputChange(idx, e)}
-              />
-              <Button onClick={() => handleRemoveInput(idx)}>ลบ</Button>
+              {input.device_name !== "" && (
+                <>
+                  <TextField
+                    id={`serial_number-${idx}`}
+                    variant="outlined"
+                    size="small"
+                    name="serial_number"
+                    label="หมายเลขเครื่อง"
+                    value={input.serial_number}
+                    onChange={(e) => handleInputChange(idx, e)}
+                  />
+                  <IconButton aria-label="delete" size="small">
+                    <DeleteIcon
+                      fontSize="small"
+                      onClick={() => handleRemoveInput(idx)}
+                      sx={{ color: "red" }}
+                    />
+                  </IconButton>
+                </>
+              )}
             </div>
           );
         })}
-        <Button onClick={handleAddInput}>เพิ่ม</Button>
-        <Button onClick={handleSubmit}>ส่ง</Button>
+        {inputs.length !== 0 &&
+          inputs.every((item) => item.device_name !== "") && (
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              sx={{ marginTop: 2 }}
+            >
+              เพิ่ม
+            </Button>
+          )}
       </div>
     </div>
   );

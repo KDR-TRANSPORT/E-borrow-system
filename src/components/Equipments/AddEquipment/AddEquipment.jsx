@@ -78,10 +78,10 @@ function AddEquipment() {
     setFormData({ ...formData, date: formattedDate });
   };
 
-
+  console.log('form',formData);
   return (
     <div className="mx-16">
-      <h1 className="text-2xl font-bold my-6">Add an equipment.</h1>
+      <h1 className="text-2xl font-bold my-6">เพิ่มอุปกรณ์</h1>
       <hr></hr>
       <form onSubmit={handleSubmit}>
         <div className="mt-20 mb-10   space-y-10 flex flex-col">
@@ -89,28 +89,28 @@ function AddEquipment() {
             {" "}
             <Date value={formData.date} onDateChange={handleDateChange} />
           </div>
-          <div className="flex space-x-24">
+          <div className="flex space-x-14">
             {" "}
             <EmployeeId value={formData.employee_id} onChange={handleChange} />
             <EmployeeName
               value={formData.employee_name}
               onChange={handleChange}
-            />
-          </div>
-          <div className="flex space-x-24">
-            {" "}
+            />{" "}
             <EmployeePhone value={formData.phone} onChange={handleChange} />
+          </div>
+          <div className="flex space-x-14">
+            {" "}
             <EmployeeRank
               value={formData.employee_dept}
               onChange={handleChange}
             />
-          </div>
-          <div className="flex space-x-24">
-            {" "}
             <EmployeeDept
               value={formData.employee_rank}
               onChange={handleChange}
             />
+          </div>
+          <div className="flex space-x-24">
+            {" "}
             <EmployeeBranchId
               value={formData.branch_id}
               onChange={handleChange}
@@ -127,10 +127,10 @@ function AddEquipment() {
             variant="contained"
             type="submit"
           >
-            <span>Save</span>
+            <span>บันทึก</span>
           </LoadingButton>
           <Link to="/equipments">
-            <Button variant="outlined">Cancel</Button>
+            <Button variant="outlined">ยกเลิก</Button>
           </Link>
         </div>
       </form>

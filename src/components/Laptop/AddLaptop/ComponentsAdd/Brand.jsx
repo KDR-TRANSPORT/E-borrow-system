@@ -8,7 +8,7 @@ function Brand({ value, onChange }) {
 
   return (
     <div className="relative">
-      <h1 className="font-semibold  absolute -top-6 left-1 text-sm ">Brand</h1>
+      <h1 className="font-semibold  absolute -top-6 left-1 text-sm ">ยี่ห้อ</h1>
       <TextField
         id="standard-basic"
         variant="outlined"

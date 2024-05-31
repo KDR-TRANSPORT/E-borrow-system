@@ -147,26 +147,26 @@ function EditEquipment() {
 
   return (
     <div className="mx-16">
-      <h1 className="text-2xl font-bold my-6">Edit an equipment.</h1>
+      <h1 className="text-2xl font-bold my-6">แก้ไขการยืม-คืนอุปกรณ์</h1>
       <hr></hr>
       <form onSubmit={handleSubmit}>
         <div className="mt-20 mb-10   space-y-10 flex flex-col">
-          <div className="flex">
+          <div className="flex items-center space-x-16 ">
             {" "}
-            <DateEdit value={formData.date} onDateChange={handleDateChange} />
-          </div>
-          <div className="flex space-x-24">
-            {" "}
+            <DateEdit
+              value={formData.date}
+              onDateChange={handleDateChange}
+            />{" "}
             <EmployeeIdEdit
               value={formData.employee_id}
               onChange={handleChange}
-            />
+            />{" "}
             <EmployeeNameEdit
               value={formData.employee_name}
               onChange={handleChange}
             />
           </div>
-          <div className="flex space-x-24">
+          <div className="flex space-x-16">
             {" "}
             <EmployeePhoneEdit
               value={formData.employee_phone}
@@ -175,21 +175,21 @@ function EditEquipment() {
             <EmployeeRankEdit
               value={formData.employee_rank}
               onChange={handleChange}
-            />
-          </div>
-          <div className="flex space-x-24">
-            {" "}
+            />{" "}
             <EmployeeDeptEdit
               value={formData.employee_dept}
               onChange={handleChange}
             />
+          </div>
+          <div className="flex space-x-24">
+            {" "}
             <EmployeeBranchIdEdit
               value={formData.branch_id}
               onChange={handleChange}
             />
           </div>
           <div>
-            <BorrowedList 
+            <BorrowedList
               markedData={markedData}
               setMarkedData={setMarkedData}
               getMarkedData={getMarkedData}
@@ -208,10 +208,10 @@ function EditEquipment() {
             variant="contained"
             type="submit"
           >
-            <span>Save</span>
+            <span>บันทึก</span>
           </LoadingButton>
           <Link to="/equipments">
-            <Button variant="outlined">Cancel</Button>
+            <Button variant="outlined">ยกเลิก</Button>
           </Link>
         </div>
       </form>

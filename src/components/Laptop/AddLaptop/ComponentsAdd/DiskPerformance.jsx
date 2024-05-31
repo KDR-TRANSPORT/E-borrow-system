@@ -9,7 +9,7 @@ function DiskPerformance({ value, onChange }) {
   return (
     <div className="relative">
       <h1 className="font-semibold text-sm  absolute -top-6 left-1">
-        Disk Performance
+        ประสิทธิภาพดิสก์
       </h1>
       <TextField
         id="standard-basic"

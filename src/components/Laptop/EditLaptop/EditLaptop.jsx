@@ -163,7 +163,7 @@ function EditLaptop() {
     addSingleImageLabtopData(id, formData)
       .then((res) => {
         console.log("res image", res);
-        setNewImageSuccess("Edited a new image sucessfully !");
+        setNewImageSuccess("แก้ไขรูปภาพสำเร็จ !");
 
         setTimeout(() => {
           setNewImageSuccess("");
@@ -180,7 +180,7 @@ function EditLaptop() {
 
   return (
     <div className="mx-16">
-      <h1 className="text-2xl font-bold my-6">Edit the laptop.</h1>
+      <h1 className="text-2xl font-bold my-6">แก้ไขข้อมูลโน้ตบุ้ค</h1>
       <hr></hr>
       <div className="flex items-center">
         <form onSubmit={handleSubmit}>
@@ -228,10 +228,10 @@ function EditLaptop() {
               variant="contained"
               type="submit"
             >
-              <span>Save</span>
+              <span>บันทึก</span>
             </LoadingButton>
             <Link to="/">
-              <Button variant="outlined">Cancel</Button>
+              <Button variant="outlined">ยกเลิก</Button>
             </Link>
           </div>
         </form>
@@ -272,7 +272,7 @@ function EditLaptop() {
               variant="contained"
               size="smal"
             >
-              <span>Save</span>
+              <span>บันทึก</span>
             </LoadingButton>
           </div>
         </div>

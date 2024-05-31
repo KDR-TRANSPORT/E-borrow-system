@@ -31,7 +31,7 @@ export default function Image({ onChange }) {
         startIcon={<CloudUploadIcon />}
         color="success"
       >
-        Upload file
+        อัพโหลดรูปภาพ
         <VisuallyHiddenInput
           type="file"
           name="picture[]"
