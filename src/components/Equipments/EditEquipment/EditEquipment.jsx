@@ -19,6 +19,7 @@ import EmployeePhoneEdit from "./EditComponents/EmployeePhoneEdit";
 import EmployeeRankEdit from "./EditComponents/EmployeeRankEdit";
 import BorrowedList from "./EditComponents/BorrowedList";
 import BorrowedListSec from "./EditComponents/BorrowedList copy";
+
 function EditEquipment() {
   const navigate = useNavigate();
   const [isLoading, setIsloading] = useState(false);
