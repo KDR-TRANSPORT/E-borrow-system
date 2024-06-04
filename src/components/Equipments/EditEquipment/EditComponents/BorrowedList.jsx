@@ -17,7 +17,7 @@ import SaveAsIcon from "@mui/icons-material/SaveAs";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-
+import CloseIcon from "@mui/icons-material/Close";
 export default function BorrowedList({
   markedData,
   getMarkedData,
@@ -305,7 +305,7 @@ export default function BorrowedList({
             <div className="flex items-center">
               {editId === item.id && isEditing ? (
                 <div className="flex mt-4">
-                  <span className="mt-2 mr-2">{idx+1}.</span>
+                  <span className="mt-2 mr-2">{idx + 1}.</span>
                   <TextField
                     id="standard-basic"
                     variant="outlined"
@@ -394,11 +394,11 @@ export default function BorrowedList({
                     }}
                     startIcon={<EditIcon />}
                     sx={{
-                      backgroundColor: "#ffef62",
-                      color: "black",
+                     
                       padding: 1,
                       marginLeft: 10,
                     }}
+                    color="primary"
                   >
                     แก้ไข
                   </Button>
@@ -463,13 +463,20 @@ export default function BorrowedList({
                     value={input.serial_number}
                     onChange={(e) => handleInputChange(idx, e)}
                   />
-                  <IconButton aria-label="delete" size="small">
+                  {/* <IconButton aria-label="delete" size="small">
                     <DeleteIcon
                       fontSize="small"
                       onClick={() => handleRemoveInput(idx)}
                       sx={{ color: "red" }}
                     />
-                  </IconButton>
+                  </IconButton> */}
+                  <div className="p-1 bg-red-500 cursor-pointer rounded-md">
+                    <CloseIcon
+                      fontSize="small"
+                      onClick={() => handleRemoveInput(idx)}
+                      sx={{ color: "white" }}
+                    />
+                  </div>
                 </>
               )}
             </div>
