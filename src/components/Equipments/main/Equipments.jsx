@@ -11,8 +11,6 @@ import AddIcon from "@mui/icons-material/Add";
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
 
-
-
 function Equipments() {
   const [allDataAll, setAlldataAll] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -197,7 +195,6 @@ function Equipments() {
 }
 
 export default Equipments;
-
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",

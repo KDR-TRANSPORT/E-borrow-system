@@ -344,8 +344,8 @@ export default function BorrowedList({
                 <Button
                   onClick={(e) => returnedSubmit(e, item)}
                   disabled={editId === item.id && isEditing}
-                  sx={{ backgroundColor: "red", color: "", padding: 1 }}
-                  size="smal"
+                  sx={{ backgroundColor: "#f36c60", color: "", padding: 1 }}
+                  size="small"
                 >
                   {" "}
                   <p className="">คืน</p>
@@ -354,7 +354,7 @@ export default function BorrowedList({
                 <Button
                   onClick={(e) => returnedSubmit(e, item)}
                   disabled={editId === item.id && isEditing}
-                  sx={{ backgroundColor: "green", color: "white", padding: 1 }}
+                  sx={{ backgroundColor: "#87EA1D", color: "white", padding: 1 }}
                   size="smal"
                 >
                   {" "}
@@ -470,7 +470,7 @@ export default function BorrowedList({
                       sx={{ color: "red" }}
                     />
                   </IconButton> */}
-                  <div className="p-1 bg-red-500 cursor-pointer rounded-md">
+                  <div className="p-1 bg-red-400 cursor-pointer rounded-md">
                     <CloseIcon
                       fontSize="small"
                       onClick={() => handleRemoveInput(idx)}
