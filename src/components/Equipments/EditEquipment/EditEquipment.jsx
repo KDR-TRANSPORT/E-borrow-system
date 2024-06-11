@@ -18,7 +18,8 @@ import EmployeeNameEdit from "./EditComponents/EmployeeNameEdit";
 import EmployeePhoneEdit from "./EditComponents/EmployeePhoneEdit";
 import EmployeeRankEdit from "./EditComponents/EmployeeRankEdit";
 import BorrowedList from "./EditComponents/BorrowedList";
-import BorrowedListSec from "./EditComponents/BorrowedList copy";
+
+import MyDocument from "../Print/MyDocument";
 
 function EditEquipment() {
   const navigate = useNavigate();
@@ -81,7 +82,6 @@ function EditEquipment() {
   const getMarkedData = () => {
     getMarkedEquipmentData(id)
       .then((res) => {
-        console.log("MarkedData", res.data.data);
         setMarkedData(res.data.data);
       })
       .catch((err) => console.log(err));
@@ -144,11 +144,12 @@ function EditEquipment() {
     setFormData({ ...formData, date: formattedDate });
   };
 
-  console.log("fromData", formData);
-
   return (
     <div className="mx-16">
-      <h1 className="text-2xl font-bold my-6">แก้ไขการยืม-คืนอุปกรณ์</h1>
+      <div className="flex items-center">
+        <h1 className="text-2xl font-bold my-6">แก้ไขการยืม-คืนอุปกรณ์</h1>
+        <MyDocument markedData={markedData} />
+      </div>
       <hr></hr>
       <form onSubmit={handleSubmit}>
         <div className="mt-20 mb-10   space-y-10 flex flex-col">

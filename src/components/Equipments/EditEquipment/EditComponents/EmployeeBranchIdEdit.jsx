@@ -8,11 +8,9 @@ function EmployeeBranchIdEdit({ value, onChange }) {
 
   const handleChange = (e) => {
     const newValue = e.target.value;
-    console.log("newValue", newValue);
     onChange(e);
   };
 
-  console.log('value', value);
   return (
     <div className="relative mt-2">
       <h1 className="font-semibold text-sm  absolute -top-6 left-1">

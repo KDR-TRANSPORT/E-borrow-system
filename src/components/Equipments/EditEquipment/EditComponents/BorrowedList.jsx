@@ -15,7 +15,6 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CloseIcon from "@mui/icons-material/Close";
 export default function BorrowedList({
@@ -72,9 +71,9 @@ export default function BorrowedList({
 
   const handleInputChange = (index, event) => {
     const { name, value } = event.target;
-    console.log("", value);
+
     let updatedInputs;
-    if (name === "device_name" && value === "อื่นๆ") {
+    if (name === "device_name" && value === "") {
       // ถ้าเลือก "อื่นๆ" ให้สร้างฟิลด์ใหม่ที่ให้กรอกข้อความ
       updatedInputs = inputs.map((input, idx) =>
         idx === index ? { ...input, [name]: value } : input
@@ -95,7 +94,6 @@ export default function BorrowedList({
       device_name: input.device_name.trim() === "" ? "???" : input.device_name,
     };
   });
-  console.log("validatedInputs", validatedInputs);
 
   // เพิ่มช่องใหม่ 1 ช่อง
   const handleSubmit = async () => {
@@ -161,7 +159,6 @@ export default function BorrowedList({
         "http://192.168.0.145:8080/api/borrowdevicearrays",
         defaultData
       );
-      console.log("ddefautl", response.data.data);
       setNewItems([...newItems, ...defaultData]);
       getMarkedData();
     } catch (error) {
@@ -172,7 +169,6 @@ export default function BorrowedList({
   const returnedSubmit = async (e, item) => {
     const { device_name, serial_number, return_date, id } = item;
 
-    console.log("idxxx", id);
     let submissionData = {};
     // กรณีต้องการเปลี่ยนเป็นคืนแล้ว
     if (item.return_status === 0) {
@@ -193,8 +189,6 @@ export default function BorrowedList({
         id,
       };
     }
-
-    console.log("submissionData", submissionData);
 
     try {
       Swal.fire({
@@ -257,7 +251,6 @@ export default function BorrowedList({
 
   const handleEditClick = async (e, itemId, serialNumber) => {
     e.preventDefault();
-    console.log("itemId:", itemId); // Log ค่า itemId
     setIsEditing((prevIsEditing) => !prevIsEditing);
     setEditID(itemId);
   };
@@ -271,8 +264,6 @@ export default function BorrowedList({
     setReturnedDate(formattedDate);
   };
 
-  console.log("markedData", markedData);
-  console.log("inputs", inputs);
   return (
     <div>
       {markedData.length === 0 && (
@@ -354,7 +345,11 @@ export default function BorrowedList({
                 <Button
                   onClick={(e) => returnedSubmit(e, item)}
                   disabled={editId === item.id && isEditing}
-                  sx={{ backgroundColor: "#87EA1D", color: "white", padding: 1 }}
+                  sx={{
+                    backgroundColor: "#87EA1D",
+                    color: "white",
+                    padding: 1,
+                  }}
                   size="smal"
                 >
                   {" "}
@@ -394,7 +389,6 @@ export default function BorrowedList({
                     }}
                     startIcon={<EditIcon />}
                     sx={{
-                     
                       padding: 1,
                       marginLeft: 10,
                     }}
@@ -411,7 +405,7 @@ export default function BorrowedList({
       <div className="my-4">
         {/* <h2 className="font-bold">เพิ่มใหม่</h2> */}
         {inputs.map((input, idx) => {
-          console.log("input device_name", input.device_name);
+          // console.log("input device_name", input.device_name);
 
           return (
             <div key={idx} className="flex items-center space-x-8 my-2">
@@ -427,22 +421,21 @@ export default function BorrowedList({
                   id={`device_name-${idx}`}
                   onChange={(e) => handleInputChange(idx, e)}
                   size="small"
+                  defaultValue="" // ตั้งค่า value เป็น "เปลี่ยน Laptop" เป็นค่าเริ่มต้น
                 >
                   {" "}
-                  <MenuItem disabled>เลือก...</MenuItem>
                   <MenuItem value="เปลี่ยน Laptop">เปลี่ยน Laptop</MenuItem>
                   <MenuItem value="เปลี่ยน Adaptor">เปลี่ยน Adaptor</MenuItem>
                   <MenuItem value="เปลี่ยน Mouse">เปลี่ยน Mouse</MenuItem>
                   <MenuItem value="เปลี่ยน กระเป๋า">เปลี่ยน กระเป๋า</MenuItem>
-                  <MenuItem value="อื่นๆ">อื่นๆ</MenuItem>
+                  <MenuItem value="">อื่นๆ</MenuItem>
                 </Select>
               </FormControl>
 
               {input.device_name !== "เปลี่ยน Laptop" &&
                 input.device_name !== "เปลี่ยน Adaptor" &&
                 input.device_name !== "เปลี่ยน Mouse" &&
-                input.device_name !== "เปลี่ยน กระเป๋า" &&
-                input.device_name !== "" && (
+                input.device_name !== "เปลี่ยน กระเป๋า" && (
                   <TextField
                     id={`other_device-${idx}`}
                     variant="outlined"
@@ -463,13 +456,7 @@ export default function BorrowedList({
                     value={input.serial_number}
                     onChange={(e) => handleInputChange(idx, e)}
                   />
-                  {/* <IconButton aria-label="delete" size="small">
-                    <DeleteIcon
-                      fontSize="small"
-                      onClick={() => handleRemoveInput(idx)}
-                      sx={{ color: "red" }}
-                    />
-                  </IconButton> */}
+
                   <div className="p-1 bg-red-400 cursor-pointer rounded-md">
                     <CloseIcon
                       fontSize="small"
