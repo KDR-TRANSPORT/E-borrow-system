@@ -102,14 +102,14 @@ const styles = StyleSheet.create({
 
     textAlign: "center", // จัดตำแหน่งข้อความให้อยู่กึ่งกลาง
     paddingTop: "5px",
-    fontSize: "13px",
+    fontSize: "10px",
     wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
   tableBodyCell: {
     minHeight: "20px",
     paddingTop: "5px",
     textAlign: "center",
-    fontSize: "12px",
+    fontSize: "10px",
     wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
 
