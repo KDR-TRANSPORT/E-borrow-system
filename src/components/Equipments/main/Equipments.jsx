@@ -11,6 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Equipments() {
   const [allDataAll, setAlldataAll] = useState([]);
@@ -24,6 +25,7 @@ function Equipments() {
       setIsLoading(false);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   }
   useEffect(() => {
@@ -162,35 +164,41 @@ function Equipments() {
           </Button>
         </Link>
       </div>
-      <Box
-        sx={{
-          height: 550,
-        }}
-      >
-        <DataGrid
-          rows={allDataAll}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 100,
-              },
-            },
+      {isLoading ? (
+        <div className="flex justify-center mt-[10%]">
+          <CircularProgress />
+        </div>
+      ) : (
+        <Box
+          sx={{
+            height: 550,
           }}
-          rowHeight={50}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-          getRowId={(row) => row.id}
-          localeText={{ noRowsLabel: "No Information..." }}
-          slots={
-            ({
-              loadingOverlay: LinearProgress,
-            },
-            { noRowsOverlay: CustomNoRowsOverlay })
-          }
-          loading={isLoading}
-        />
-      </Box>
+        >
+          <DataGrid
+            rows={allDataAll}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 100,
+                },
+              },
+            }}
+            rowHeight={50}
+            pageSizeOptions={[5]}
+            disableRowSelectionOnClick
+            getRowId={(row) => row.id}
+            localeText={{ noRowsLabel: "No Information..." }}
+            slots={
+              ({
+                loadingOverlay: LinearProgress,
+              },
+              { noRowsOverlay: CustomNoRowsOverlay })
+            }
+            loading={isLoading}
+          />
+        </Box>
+      )}
     </div>
   );
 }

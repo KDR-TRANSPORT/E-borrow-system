@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function LaptopInfo() {
   const [allDataAll, setAlldataAll] = useState([]);
@@ -23,8 +24,8 @@ export default function LaptopInfo() {
     try {
       getLabtopsData().then((response) => {
         setAlldataAll(response.data.data);
+        setIsLoading(false);
       });
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -199,46 +200,52 @@ export default function LaptopInfo() {
           </Button>
         </Link>
       </div>
-      <Box
-        sx={{
-          height: 550,
-          width: "100%",
-          // "& .active": {
-          //   backgroundColor: "#ffde59",
-          //   color: "#1a3e72",
-          //   fontWeight: "600",
-          // },
-          // "& .inactive": {
-          //   backgroundColor: "rgb(239 68 68)",
-          //   color: "black",
-          //   fontWeight: "600",
-          // },
-        }}
-      >
-        <DataGrid
-          rows={allDataAll}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 100,
-              },
-            },
+      {isLoading ? (
+        <div className="flex justify-center mt-[10%]">
+          <CircularProgress />
+        </div>
+      ) : (
+        <Box
+          sx={{
+            height: 550,
+            width: "100%",
+            // "& .active": {
+            //   backgroundColor: "#ffde59",
+            //   color: "#1a3e72",
+            //   fontWeight: "600",
+            // },
+            // "& .inactive": {
+            //   backgroundColor: "rgb(239 68 68)",
+            //   color: "black",
+            //   fontWeight: "600",
+            // },
           }}
-          rowHeight={50}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-          getRowId={(row) => row.id}
-          localeText={{ noRowsLabel: "No Information..." }}
-          slots={
-            ({
-              loadingOverlay: LinearProgress,
-            },
-            { noRowsOverlay: CustomNoRowsOverlay })
-          }
-          loading={isLoading}
-        />
-      </Box>
+        >
+          <DataGrid
+            rows={allDataAll}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 100,
+                },
+              },
+            }}
+            rowHeight={50}
+            pageSizeOptions={[5]}
+            disableRowSelectionOnClick
+            getRowId={(row) => row.id}
+            localeText={{ noRowsLabel: "No Information..." }}
+            slots={
+              ({
+                loadingOverlay: LinearProgress,
+              },
+              { noRowsOverlay: CustomNoRowsOverlay })
+            }
+            loading={isLoading}
+          />
+        </Box>
+      )}
       <SetModal
         selectedImage={selectedImage}
         setSelectedImage={setSelectedImage}

@@ -471,16 +471,15 @@ export default function BorrowedList({
                     value={input.serial_number}
                     onChange={(e) => handleInputChange(idx, e)}
                   />
-
-                  <div className="p-1 bg-red-400 cursor-pointer rounded-md">
-                    <CloseIcon
-                      fontSize="small"
-                      onClick={() => handleRemoveInput(idx)}
-                      sx={{ color: "white" }}
-                    />
-                  </div>
                 </>
               )}
+              <div className="p-1 bg-red-400 cursor-pointer rounded-md">
+                <CloseIcon
+                  fontSize="small"
+                  onClick={() => handleRemoveInput(idx)}
+                  sx={{ color: "white" }}
+                />
+              </div>
             </div>
           );
         })}

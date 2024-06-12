@@ -98,8 +98,10 @@ const styles = StyleSheet.create({
     marginBottom: "10px",
   },
   tableHeaderCell: {
+    minHeight: "20px",
+
     textAlign: "center", // จัดตำแหน่งข้อความให้อยู่กึ่งกลาง
-    paddingTop: "10px",
+    paddingTop: "5px",
     fontSize: "13px",
     wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
@@ -341,7 +343,7 @@ const MyDoc = ({ markedData }) => {
             ผู้ยืมควรอ่านทำความเข้าใจและโปรดตรวจสอบ ดังนี้้
           </Text>
           <Text style={styles.conditionOne}>
-            1. ข้อมูลที่มีดารบันทึกไว้ในอุปกรณ์ หากสูญหาย แผนกไอทีจะไม่รับผิดชอบ
+            1. ข้อมูลที่มีการบันทึกไว้ในอุปกรณ์ หากสูญหาย แผนกไอทีจะไม่รับผิดชอบ
           </Text>
           <Text style={styles.conditionOne}>
             2. หากอุปกรณ์ที่ยืมเกิดการชำรุดเสียหายหรือสูญหาย ผู้ยืมต้อง
