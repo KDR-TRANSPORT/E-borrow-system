@@ -10,6 +10,7 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
+import axios from "axios";
 
 function Equipments() {
   const [allDataAll, setAlldataAll] = useState([]);
@@ -45,7 +46,7 @@ function Equipments() {
     }).then((res) => {
       if (res.isConfirmed) {
         axios
-          .delete(`http://192.168.0.145:8080/api/laptops/${id}`)
+          .delete(`http://192.168.0.145:8080/api/borrows/${id}`)
           .then((res) => {
             console.log(res);
             Swal.fire({

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     fontFamily: "fontAng",
   },
   section: {
-    margin: 10,
+    marginHorizontal: 10,
     padding: 10,
     flexGrow: 1,
   },
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
   },
   title: {
     textAlign: "center",
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   date: {
     textAlign: "right",
-    marginTop: "25px",
+    marginTop: "15px",
     marginRight: "50px",
   },
   name: {
@@ -98,17 +98,17 @@ const styles = StyleSheet.create({
     marginBottom: "10px",
   },
   tableHeaderCell: {
-    height: 25, // ปรับความสูงตามที่ต้องการ
     textAlign: "center", // จัดตำแหน่งข้อความให้อยู่กึ่งกลาง
     paddingTop: "10px",
     fontSize: "13px",
+    wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
   tableBodyCell: {
-    height: 20, // ปรับความสูงตามที่ต้องการ
+    minHeight: "20px",
     paddingTop: "5px",
     textAlign: "center",
-    wordWrap: "break-word",
-    fontSize: "13px",
+    fontSize: "12px",
+    wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
 
   condition: {
@@ -133,10 +133,10 @@ const styles = StyleSheet.create({
     marginTop: "15px",
     alignItems: "center",
   },
-  signBorrowerOne: { marginLeft: "340px", marginTop: "30px" },
+  signBorrowerOne: { marginLeft: "340px", marginTop: "10px" },
   signBorrowerTwo: {
     marginLeft: "375px",
-    marginTop: "25px",
+    marginTop: "20px",
   },
   signBoxes: {
     flexDirection: "row",
@@ -414,7 +414,7 @@ export default function MyDocument({ markedData }) {
     <Button variant="contained" size="small" sx={{ marginLeft: "8px" }}>
       <PDFDownloadLink
         document={<MyDoc markedData={markedDataWithIndex} />}
-        fileName="somename.pdf"
+        fileName="แบบฟอร์มยืม-คืนอุปกรณ์คอมพิวเตอร์.pdf"
       >
         PDF
       </PDFDownloadLink>

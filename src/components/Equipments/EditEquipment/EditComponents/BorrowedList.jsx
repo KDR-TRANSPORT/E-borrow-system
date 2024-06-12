@@ -442,7 +442,7 @@ export default function BorrowedList({
                   <MenuItem value="เปลี่ยน Laptop">เปลี่ยน Laptop</MenuItem>
                   <MenuItem value="เปลี่ยน Adaptor">เปลี่ยน Adaptor</MenuItem>
                   <MenuItem value="เปลี่ยน Mouse">เปลี่ยน Mouse</MenuItem>
-                  <MenuItem value="เปลี่ยน กระเป๋า">เปลี่ยน กระเป๋า</MenuItem>
+                  <MenuItem value="เปลี่ยน Bag">เปลี่ยน Bag</MenuItem>
                   <MenuItem value="">อื่นๆ</MenuItem>
                 </Select>
               </FormControl>
@@ -450,7 +450,7 @@ export default function BorrowedList({
               {input.device_name !== "เปลี่ยน Laptop" &&
                 input.device_name !== "เปลี่ยน Adaptor" &&
                 input.device_name !== "เปลี่ยน Mouse" &&
-                input.device_name !== "เปลี่ยน กระเป๋า" && (
+                input.device_name !== "เปลี่ยน Bag" && (
                   <TextField
                     id={`other_device-${idx}`}
                     variant="outlined"
