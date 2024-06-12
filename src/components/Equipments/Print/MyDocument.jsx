@@ -101,12 +101,87 @@ const styles = StyleSheet.create({
     height: 25, // ปรับความสูงตามที่ต้องการ
     textAlign: "center", // จัดตำแหน่งข้อความให้อยู่กึ่งกลาง
     paddingTop: "10px",
+    fontSize: "13px",
   },
   tableBodyCell: {
     height: 20, // ปรับความสูงตามที่ต้องการ
-    paddingTop: "5px",    
+    paddingTop: "5px",
     textAlign: "center",
+    wordWrap: "break-word",
+    fontSize: "13px",
+  },
 
+  condition: {
+    marginTop: "25px",
+    marginLeft: "70px",
+  },
+  conditionOne: {
+    marginLeft: "105px",
+    marginTop: "15px",
+  },
+  conditionTwo: {
+    marginLeft: "105px",
+    marginTop: "15px",
+  },
+  responsibility: {
+    fontWeight: "bold",
+    textDecoration: "underline",
+  },
+  awareness: {
+    flexDirection: "row",
+    marginLeft: "150px",
+    marginTop: "15px",
+    alignItems: "center",
+  },
+  signBorrowerOne: { marginLeft: "340px", marginTop: "30px" },
+  signBorrowerTwo: {
+    marginLeft: "375px",
+    marginTop: "25px",
+  },
+  signBoxes: {
+    flexDirection: "row",
+    border: "2px",
+    marginTop: "20px",
+  },
+  firstSignBox: {
+    border: "1px",
+    width: "50%",
+  },
+
+  firstSignBoxOne: {
+    textAlign: "center",
+    marginTop: "5px",
+    marginBottom: "15px",
+  },
+  firstSignBoxTwo: {
+    textAlign: "center",
+    marginTop: "15px",
+  },
+  firstSignBoxThree: {
+    textAlign: "center",
+    marginTop: "15px",
+  },
+  firstSignBoxFour: {
+    textAlign: "center",
+    marginTop: "15px",
+    marginBottom: "15px",
+  },
+  secondSignBox: {
+    border: "1px",
+    width: "50%",
+  },
+  secondSignBoxOne: {
+    textAlign: "center",
+    marginTop: "5px",
+    marginBottom: "10px",
+  },
+  checkCorrection: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkerName: {
+    textAlign: "center",
+    marginTop: "15px",
   },
 });
 
@@ -191,7 +266,7 @@ const MyDoc = ({ markedData }) => {
               <Text style={styles.tableTitle}>ยืมอุปกรณ์</Text>
               <Table data={paddedBorrowedDevices}>
                 <TableHeader>
-                  <TableCell style={styles.tableHeaderCell}>ลำดับบ</TableCell>
+                  {/* <TableCell style={styles.tableHeaderCell}>ลำดับบ</TableCell> */}
                   <TableCell style={styles.tableHeaderCell}>รายการ</TableCell>
                   <TableCell style={styles.tableHeaderCell}>
                     เลขครุภัณฑ์
@@ -199,10 +274,10 @@ const MyDoc = ({ markedData }) => {
                   <TableCell style={styles.tableHeaderCell}>สถานะ</TableCell>
                 </TableHeader>
                 <TableBody>
-                  <DataTableCell
+                  {/* <DataTableCell
                     style={styles.tableBodyCell}
                     getContent={(r) => r.index}
-                  />
+                  /> */}
                   <DataTableCell
                     style={styles.tableBodyCell}
                     getContent={(r) => r.device_name}
@@ -228,7 +303,7 @@ const MyDoc = ({ markedData }) => {
               <Text style={styles.tableTitle}>เปลี่ยนอุปกรณ์</Text>
               <Table data={paddedChangedDevices}>
                 <TableHeader>
-                  <TableCell style={styles.tableHeaderCell}>ลำดับบ</TableCell>
+                  {/* <TableCell style={styles.tableHeaderCell}>ลำดับบ</TableCell> */}
                   <TableCell style={styles.tableHeaderCell}>รายการ</TableCell>
                   <TableCell style={styles.tableHeaderCell}>
                     เลขครุภัณฑ์
@@ -236,10 +311,10 @@ const MyDoc = ({ markedData }) => {
                   <TableCell style={styles.tableHeaderCell}>สถานะ</TableCell>
                 </TableHeader>
                 <TableBody>
-                  <DataTableCell
+                  {/* <DataTableCell
                     style={styles.tableBodyCell}
                     getContent={(r) => r.index}
-                  />
+                  /> */}
                   <DataTableCell
                     style={styles.tableBodyCell}
                     getContent={(r) => r.device_name}
@@ -260,6 +335,67 @@ const MyDoc = ({ markedData }) => {
                   />
                 </TableBody>
               </Table>
+            </View>
+          </View>
+          <Text style={styles.condition}>
+            ผู้ยืมควรอ่านทำความเข้าใจและโปรดตรวจสอบ ดังนี้้
+          </Text>
+          <Text style={styles.conditionOne}>
+            1. ข้อมูลที่มีดารบันทึกไว้ในอุปกรณ์ หากสูญหาย แผนกไอทีจะไม่รับผิดชอบ
+          </Text>
+          <Text style={styles.conditionOne}>
+            2. หากอุปกรณ์ที่ยืมเกิดการชำรุดเสียหายหรือสูญหาย ผู้ยืมต้อง
+            <Text style={styles.responsibility}>รับผิดชอบ</Text>ค่าเสียหาย
+          </Text>
+          <View style={styles.awareness}>
+            {" "}
+            <Text style={styles.box}></Text>
+            <Text>รับทราบ</Text>
+          </View>
+          <Text style={styles.signBorrowerOne}>
+            ลงชื่อ...............................................ผู้ยืม
+          </Text>
+          <Text style={styles.signBorrowerTwo}>
+            (.........................................)
+          </Text>
+          <View style={styles.signBoxes}>
+            <View style={styles.firstSignBox}>
+              <Text style={styles.firstSignBoxOne}>ส่งคืนพัสดุ</Text>
+              <Text style={styles.firstSignBoxTwo}>
+                ลงชื่อ........................................ผู้ส่งคืน
+              </Text>
+              <Text style={styles.firstSignBoxThree}>
+                (....................................................)
+              </Text>
+              <Text style={styles.firstSignBoxFour}>
+                วันที่...................................
+              </Text>
+            </View>
+            <View style={styles.secondSignBox}>
+              {" "}
+              <Text style={styles.secondSignBoxOne}>ตรวจสอบพัสดุ</Text>
+              <View style={styles.checkCorrection}>
+                {" "}
+                <View style={styles.checkCorrection}>
+                  {" "}
+                  <Text style={styles.box}></Text>
+                  <Text>ครบถ้วน</Text>
+                </View>
+                <View style={styles.checkCorrection}>
+                  {" "}
+                  <Text style={styles.box}></Text>
+                  <Text>ไม่ครบถ้วน..........................</Text>
+                </View>
+              </View>
+              <Text style={styles.checkerName}>
+                ลงชื่อ.........................................ผู้ตรวจสอบ
+              </Text>
+              <Text style={styles.checkerName}>
+                (.................................................)
+              </Text>
+              <Text style={styles.checkerName}>
+                วันที่...............................................
+              </Text>
             </View>
           </View>
         </View>

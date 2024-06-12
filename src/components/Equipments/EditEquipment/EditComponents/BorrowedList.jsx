@@ -22,6 +22,8 @@ export default function BorrowedList({
   getMarkedData,
   id,
   getSingleData,
+  setIsloading,
+  isLoading,
 }) {
   const [newItems, setNewItems] = useState([]);
   const [deviceName, setDeviceName] = useState("");
@@ -97,6 +99,7 @@ export default function BorrowedList({
 
   // เพิ่มช่องใหม่ 1 ช่อง
   const handleSubmit = async () => {
+    setIsloading(true);
     try {
       const response = await axios.post(
         "http://192.168.0.145:8080/api/borrowdevicearrays",
@@ -116,8 +119,10 @@ export default function BorrowedList({
       setInputs([]);
       getMarkedData();
       getSingleData();
+      setIsloading(false);
     } catch (error) {
       console.error("Error submitting data:", error);
+      setIsloading(false);
     }
   };
 
@@ -289,117 +294,127 @@ export default function BorrowedList({
 
       {markedData.map((item, idx) => {
         return (
-          <div
-            key={idx}
-            className="grid  grid-cols-[10%_15%_30%] space-y-4 space-x-12"
-          >
-            <div className="flex items-center">
-              {editId === item.id && isEditing ? (
-                <div className="flex mt-4">
-                  <span className="mt-2 mr-2">{idx + 1}.</span>
+          <>
+            <div
+              key={idx}
+              className="grid grid-cols-[25%_25%_40%]  space-x-10 "
+            >
+              <div className="flex items-center ">
+                {editId === item.id && isEditing ? (
+                  <div className="flex mt-4">
+                    <span className="mt-2 mr-2">{idx + 1}.</span>
+                    <TextField
+                      id="standard-basic"
+                      variant="outlined"
+                      size="small"
+                      name="device_name"
+                      label="Device name"
+                      // value={serialNumber}
+                      defaultValue={item.device_name}
+                      onChange={(e) => setDeviceName(e.target.value)}
+                    />
+                  </div>
+                ) : (
+                  <div className="flex space-x-2 items-start mt-6    ">
+                    <span>{idx + 1}. </span>{" "}
+                    <p className="	text-wrap max-w-[300px] break-all">
+                      {" "}
+                      {item.device_name}
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="">
+                {editId === item.id && isEditing ? (
                   <TextField
                     id="standard-basic"
                     variant="outlined"
                     size="small"
-                    name="device_name"
-                    // value={serialNumber}
-                    defaultValue={item.device_name}
-                    onChange={(e) => setDeviceName(e.target.value)}
+                    sx={{ marginTop: "16px" }}
+                    name="serial_number"
+                    label="Serial number"
+                    defaultValue={item.serial_number}
+                    onChange={(e) => setSerialNumber(e.target.value)}
                   />
-                </div>
-              ) : (
-                <div className="flex space-x-2 items-center mt-6">
-                  <span>{idx + 1}. </span> <p> {item.device_name}</p>
-                </div>
-              )}
-            </div>
-            <div className="">
-              {editId === item.id && isEditing ? (
-                <TextField
-                  id="standard-basic"
-                  variant="outlined"
-                  size="small"
-                  name="serial_number"
-                  defaultValue={item.serial_number}
-                  onChange={(e) => setSerialNumber(e.target.value)}
-                />
-              ) : (
-                <div className="flex space-x-2 mt-3">
-                  <span className="font-semibold">S/N: </span>{" "}
-                  <span>{item.serial_number}</span>
-                </div>
-              )}
-            </div>
-            <div className="flex items-center space-x-4">
-              {item.return_status === 0 ? (
-                <Button
-                  onClick={(e) => returnedSubmit(e, item)}
-                  disabled={editId === item.id && isEditing}
-                  sx={{ backgroundColor: "#f36c60", color: "", padding: 1 }}
-                  size="small"
-                >
-                  {" "}
-                  <p className="">คืน</p>
-                </Button>
-              ) : (
-                <Button
-                  onClick={(e) => returnedSubmit(e, item)}
-                  disabled={editId === item.id && isEditing}
-                  sx={{
-                    backgroundColor: "#87EA1D",
-                    color: "white",
-                    padding: 1,
-                  }}
-                  size="smal"
-                >
-                  {" "}
-                  <p className="">คืน</p>
-                </Button>
-              )}
-              <p className="underline">
-                {item.return_date ? (
-                  <p className="">{item.return_date}</p>
                 ) : (
-                  <p className="mr-[5.2rem]"></p>
+                  <div className="flex space-x-2 mt-6 ">
+                    <span className="font-semibold">S/N: </span>{" "}
+                    <p className="text-wrap max-w-[300px] break-all">
+                      {item.serial_number}
+                    </p>
+                  </div>
                 )}
-              </p>
-              {editId === item.id && isEditing ? (
-                <div className="flex space-x-2 ml-6">
+              </div>
+              <div className="flex items-center space-x-4 mt-3">
+                {item.return_status === 0 ? (
                   <Button
-                    onClick={(e) => editBorrowedDevices(e, item)}
-                    startIcon={<SaveAsIcon />}
-                    variant="contained"
-                    color="primary"
-                    sx={{ marginLeft: 10 }}
+                    onClick={(e) => returnedSubmit(e, item)}
+                    disabled={editId === item.id && isEditing}
+                    sx={{ backgroundColor: "#f36c60" }}
+                    size="small"
                   >
-                    บันทึก
+                    {" "}
+                    <p className="">คืน</p>
                   </Button>
+                ) : (
                   <Button
-                    onClick={() => setIsEditing(false)}
-                    variant="outlined"
-                  >
-                    ยกเลิก
-                  </Button>
-                </div>
-              ) : (
-                <div className="">
-                  <Button
-                    onClick={(e) => {
-                      handleEditClick(e, item.id, item.serial_number);
-                    }}
-                    startIcon={<EditIcon />}
+                    onClick={(e) => returnedSubmit(e, item)}
+                    disabled={editId === item.id && isEditing}
                     sx={{
-                      padding: 1,
-                      marginLeft: 10,
+                      backgroundColor: "#87EA1D",
                     }}
-                    color="primary"
+                    size="small"
                   >
-                    แก้ไข
+                    {" "}
+                    <p className="">คืน</p>
                   </Button>
-                </div>
-              )}
+                )}
+                <p className="underline underline-offset-8">
+                  {item.return_date ? (
+                    <p className="">{item.return_date}</p>
+                  ) : (
+                    <p className="mr-[5.2rem]"></p>
+                  )}
+                </p>
+                {editId === item.id && isEditing ? (
+                  <div className="flex space-x-2 ml-6">
+                    <Button
+                      onClick={(e) => editBorrowedDevices(e, item)}
+                      startIcon={<SaveAsIcon />}
+                      variant="contained"
+                      color="primary"
+                      sx={{ marginLeft: 10 }}
+                    >
+                      บันทึก
+                    </Button>
+                    <Button
+                      onClick={() => setIsEditing(false)}
+                      variant="outlined"
+                    >
+                      ยกเลิก
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="">
+                    <Button
+                      onClick={(e) => {
+                        handleEditClick(e, item.id, item.serial_number);
+                      }}
+                      startIcon={<EditIcon />}
+                      sx={{
+                        padding: 1,
+                        marginLeft: 10,
+                      }}
+                      color="primary"
+                    >
+                      แก้ไข
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+            <hr className="w-[65%] my-2" />
+          </>
         );
       })}
       <div className="my-4">

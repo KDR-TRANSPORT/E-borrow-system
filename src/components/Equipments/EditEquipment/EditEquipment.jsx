@@ -18,6 +18,7 @@ import EmployeeNameEdit from "./EditComponents/EmployeeNameEdit";
 import EmployeePhoneEdit from "./EditComponents/EmployeePhoneEdit";
 import EmployeeRankEdit from "./EditComponents/EmployeeRankEdit";
 import BorrowedList from "./EditComponents/BorrowedList";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import MyDocument from "../Print/MyDocument";
 
@@ -80,11 +81,16 @@ function EditEquipment() {
     });
   };
   const getMarkedData = () => {
+    setIsloading(true);
     getMarkedEquipmentData(id)
       .then((res) => {
         setMarkedData(res.data.data);
+        setIsloading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsloading(false);
+      });
   };
 
   useEffect(() => {
@@ -191,17 +197,24 @@ function EditEquipment() {
             />
           </div>
           <div>
-            <BorrowedList
-              markedData={markedData}
-              setMarkedData={setMarkedData}
-              getMarkedData={getMarkedData}
-              id={id}
-              getSingleData={getSingleData}
-            />
+            {isLoading ? (
+              <div className="mx-[400px] my-[70px] h-[200px]">
+                <CircularProgress />
+              </div>
+            ) : (
+              <BorrowedList
+                markedData={markedData}
+                setMarkedData={setMarkedData}
+                getMarkedData={getMarkedData}
+                id={id}
+                getSingleData={getSingleData}
+                isLoading={isLoading}
+                setIsloading={setIsloading}
+              />
+            )}
           </div>
         </div>
-        <hr className="mb-6" />
-        <div className="space-x-6">
+        <div className="space-x-6 mb-16">
           <LoadingButton
             color="primary"
             loading={isLoading}
