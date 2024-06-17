@@ -21,6 +21,7 @@
     "@react-pdf/renderer": "^3.4.4",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
+    "firebase": "^10.12.2",
     "flowbite": "^2.3.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",

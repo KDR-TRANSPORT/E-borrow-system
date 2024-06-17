@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -23,6 +23,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useUserAuth } from "../context/UserAuthContext"; // Import the useUserAuth hook
 
 const drawerWidth = 240;
 
@@ -97,6 +98,8 @@ export default function Layout() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { logOut } = useUserAuth(); // Get the logOut function from the context
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -109,15 +112,22 @@ export default function Layout() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-  const handleCloseUserMenu = () => {
+
+  const handleCloseUserMenu = async () => {
     setAnchorElUser(null);
+    try {
+      await logOut(); // Call logOut when the menu is closed
+      navigate("/login");
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
   };
 
   const data = [
     { title: "Laptop", link: "/" },
     { title: "Equipments", link: "/equipments" },
   ];
-  
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -136,8 +146,7 @@ export default function Layout() {
             >
               <MenuIcon />
             </IconButton>
-            <div className="flex items-center justify-between  w-full">
-              {" "}
+            <div className="flex items-center justify-between w-full">
               <h1 className="text-2xl">E-Borrowing System</h1>
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Logout">
@@ -171,7 +180,7 @@ export default function Layout() {
                   ))}
                 </Menu>
               </Box>
-            </div>{" "}
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -188,11 +197,7 @@ export default function Layout() {
           <List>
             {data.map((text, index) => (
               <Link to={text.link} key={index}>
-                <ListItem
-                  key={index}
-                  disablePadding
-                  sx={{ display: "block" }}
-                >
+                <ListItem key={index} disablePadding sx={{ display: "block" }}>
                   <ListItemButton
                     sx={{
                       minHeight: 48,
