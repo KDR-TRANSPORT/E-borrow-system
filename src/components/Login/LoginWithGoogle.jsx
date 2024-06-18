@@ -10,7 +10,7 @@ export default function LoginWithGoogle() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state);
-console.log('user', user.user);
+console.log('user', user);
   async function googleLogin() {
     try {
       const result = await signInWithPopup(auth, googleProvider);

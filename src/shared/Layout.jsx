@@ -27,6 +27,7 @@ import { clearUser } from "../store/userSlice";
 
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { persistor } from "../store/store";
 
 const drawerWidth = 240;
 
@@ -124,8 +125,10 @@ export default function Layout() {
   };
   const handleLogout = async () => {
     try {
-      // await logOut(); // Call logOut when the menu is closed
+      await persistor.purge(); // Clear the persist store
       dispatch(clearUser());
+      // handleCloseUserMenu(); // Close the menu after logging out
+
       toast.success("Logged out successfully");
       navigate("/login");
     } catch (error) {
