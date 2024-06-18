@@ -8,15 +8,26 @@ import AddEquipment from "./components/Equipments/AddEquipment/AddEquipment";
 import EditEquipment from "./components/Equipments/EditEquipment/EditEquipment";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
+import ProtectedRoute from "./auth/ProtectedRoute.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
+      <ToastContainer position="top-center" autoClose={5000} />
+
       <Routes>
         {" "}
         <Route exact path="/login" element={<Login />}></Route>
         <Route exact path="/register" element={<Register />}></Route>
-        <Route element={<Layout />}>
+        <Route
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
           {" "}
           <Route index path="/" element={<LaptopInfo />}></Route>
           <Route path="/addlaptop" element={<AddLaptop />}></Route>

@@ -4,9 +4,11 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  signInWithPopup,
 } from "firebase/auth";
 
-import { auth } from "../firebase";
+import { auth, googleProvider } from "../firebase";
+import { Navigate } from "react-router-dom";
 
 const userAuthContext = createContext();
 
@@ -33,7 +35,9 @@ export function UserAuthContextProvider({ children }) {
     };
   }, []);
   return (
-    <userAuthContext.Provider value={{ user, logIn, signUp, logOut }}>
+    <userAuthContext.Provider
+      value={{ user, logIn, signUp, logOut }}
+    >
       {children}
     </userAuthContext.Provider>
   );

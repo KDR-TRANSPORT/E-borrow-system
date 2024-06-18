@@ -24,7 +24,6 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useUserAuth } from "../context/UserAuthContext"; // Import the useUserAuth hook
-
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -98,7 +97,7 @@ export default function Layout() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { logOut } = useUserAuth(); // Get the logOut function from the context
+  const { logOut, user } = useUserAuth(); // Get the logOut function from the context
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -115,8 +114,12 @@ export default function Layout() {
 
   const handleCloseUserMenu = async () => {
     setAnchorElUser(null);
+  };
+  const handleLogout = async () => {
     try {
       await logOut(); // Call logOut when the menu is closed
+      toast.success("Logged out successfully");
+
       navigate("/login");
     } catch (error) {
       console.error("Failed to log out", error);
@@ -127,7 +130,7 @@ export default function Layout() {
     { title: "Laptop", link: "/" },
     { title: "Equipments", link: "/equipments" },
   ];
-
+  console.log("user", user);
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -148,13 +151,11 @@ export default function Layout() {
             </IconButton>
             <div className="flex items-center justify-between w-full">
               <h1 className="text-2xl">E-Borrowing System</h1>
-              <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
+                <p className="mx-4">{user.email}</p>
                 <Tooltip title="Logout">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
+                    <Avatar alt="Remy Sharp" src={user.photoURL} />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -174,7 +175,7 @@ export default function Layout() {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem key={setting} onClick={handleLogout}>
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                   ))}
