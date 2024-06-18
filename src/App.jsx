@@ -10,12 +10,12 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import ProtectedRoute from "./auth/ProtectedRoute.jsx";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <>
-      <ToastContainer position="top-center" autoClose={5000} />
+      <ToastContainer position="top-center" closeOnClick autoClose={5000} />
 
       <Routes>
         {" "}
