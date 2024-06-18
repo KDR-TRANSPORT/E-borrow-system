@@ -1,10 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { useUserAuth } from "../context/UserAuthContext";
 
 function ProtectedRoute({ children }) {
-  const { user } = useUserAuth();
-  if (!user) {
+  const user = useSelector((state) => state);
+  console.log("user redux", user.user);
+  if (!user.user.user) {
     return <Navigate to="/login" />;
   }
   return children;

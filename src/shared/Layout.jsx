@@ -23,7 +23,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useUserAuth } from "../context/UserAuthContext"; // Import the useUserAuth hook
+import { clearUser } from "../store/userSlice";
+
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -97,7 +101,10 @@ export default function Layout() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { logOut, user } = useUserAuth(); // Get the logOut function from the context
+  const user = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  console.log("user redux", user.user);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -117,9 +124,9 @@ export default function Layout() {
   };
   const handleLogout = async () => {
     try {
-      await logOut(); // Call logOut when the menu is closed
+      // await logOut(); // Call logOut when the menu is closed
+      dispatch(clearUser());
       toast.success("Logged out successfully");
-
       navigate("/login");
     } catch (error) {
       console.error("Failed to log out", error);
@@ -130,7 +137,7 @@ export default function Layout() {
     { title: "Laptop", link: "/" },
     { title: "Equipments", link: "/equipments" },
   ];
-  console.log("user", user);
+  // console.log("user", user);
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -152,10 +159,10 @@ export default function Layout() {
             <div className="flex items-center justify-between w-full">
               <h1 className="text-2xl">E-Borrowing System</h1>
               <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
-                <p className="mx-4">{user.email}</p>
+                <p className="mx-4">{user?.user?.user?.email}</p>
                 <Tooltip title="Logout">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src={user.photoURL} />
+                    <Avatar alt="Remy Sharp" src={user?.user?.user?.photoURL} />
                   </IconButton>
                 </Tooltip>
                 <Menu

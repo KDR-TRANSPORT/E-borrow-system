@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LaptopInfo from "./components/Laptop/Main/LaptopInfo";
 import Equipments from "./components/Equipments/main/Equipments";
 import Layout from "./shared/Layout";
@@ -7,10 +7,10 @@ import EditLaptop from "./components/Laptop/EditLaptop/EditLaptop";
 import AddEquipment from "./components/Equipments/AddEquipment/AddEquipment";
 import EditEquipment from "./components/Equipments/EditEquipment/EditEquipment";
 import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
 import ProtectedRoute from "./auth/ProtectedRoute.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PageNotFound from "./PageNotFound.jsx";
 
 function App() {
   return (
@@ -20,7 +20,8 @@ function App() {
       <Routes>
         {" "}
         <Route exact path="/login" element={<Login />}></Route>
-        <Route exact path="/register" element={<Register />}></Route>
+        <Route path="*" element={<PageNotFound />} />
+
         <Route
           element={
             <ProtectedRoute>

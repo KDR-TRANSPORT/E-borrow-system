@@ -1,24 +1,31 @@
 import { signInWithPopup } from "firebase/auth";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { auth, googleProvider } from "../../firebase";
+import { setUser, setError } from "../../store/userSlice";
 
 export default function LoginWithGoogle() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state);
+console.log('user', user.user);
   async function googleLogin() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       console.log(result);
       const userEmail = result.user.email;
       if (userEmail.endsWith("@kdr.co.th")) {
+        dispatch(setUser(result.user));
         return result;
       } else {
         throw new Error("Invalid email domain");
       }
     } catch (error) {
       console.error("Error logging in with Google:", error);
+      dispatch(setError(error.message)); // dispatch action setError เมื่อเกิดข้อผิดพลาด
+
       throw error;
     }
   }
@@ -48,7 +55,7 @@ export default function LoginWithGoogle() {
       <div className="px-6 sm:px-0 max-w-sm">
         <button
           type="button"
-          className="text-white w-full  bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2"
+          className="text-white w-full  bg-[#fba819] hover:bg-[#fba819]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2"
           onClick={handleGoogleLogin}
         >
           <svg

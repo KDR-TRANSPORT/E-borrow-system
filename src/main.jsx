@@ -5,16 +5,19 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom"; // ทำการเปลี่ยนเป็น BrowserRouter
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {UserAuthContextProvider} from "./context/UserAuthContext.jsx";
+import { Provider } from "react-redux";
+import { store } from "./store/store.jsx";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <UserAuthContextProvider>
+    <Provider store={store}>
+    
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <App />{" "}
         </LocalizationProvider>
       </BrowserRouter>
-    </UserAuthContextProvider>{" "}
+    </Provider>
   </React.StrictMode>
 );
