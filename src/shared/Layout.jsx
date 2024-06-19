@@ -128,7 +128,6 @@ export default function Layout() {
       await persistor.purge(); // Clear the persist store
       dispatch(clearUser());
       // handleCloseUserMenu(); // Close the menu after logging out
-
       toast.success("Logged out successfully");
       navigate("/login");
     } catch (error) {
