@@ -1,39 +1,33 @@
 import axios from "axios";
 
-export const getLabtopsData = async () =>
-  await axios.get(`http://192.168.0.145:8080/api/laptops`);
+const API_URL = import.meta.env.VITE_API_BASE_PORT;
+
+
+console.log('api', API_URL);
+export const getLabtopsData = async () => await axios.get(`${API_URL}/laptops`);
 
 export const getSingleLabtopsData = async (id) =>
-  await axios.get(`http://192.168.0.145:8080/api/laptops/${id}`);
+  await axios.get(`${API_URL}/laptops/${id}`);
 
 export const addLabtopData = async (formDataNew) => {
-  return await axios.post(
-    `http://192.168.0.145:8080/api/laptops`,
-    formDataNew,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  return await axios.post(`${API_URL}/laptops`, formDataNew, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
+
 export const editLabtopData = async (id, formDataNew) => {
-  return await axios.put(
-    `http://192.168.0.145:8080/api/laptops/${id}`,
-    formDataNew
-  );
+  return await axios.put(`${API_URL}/laptops/${id}`, formDataNew);
 };
+
 export const addSingleImageLabtopData = async (id, formData) => {
-  return await axios.post(
-    `http://192.168.0.145:8080/api/laptopimages/${id}`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  return await axios.post(`${API_URL}/laptopimages/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 export const deleteLabtopData = async () =>
-  await axios.delete(`http://192.168.0.145:8080/api/laptops`);
+  await axios.delete(`${API_URL}/laptops`);

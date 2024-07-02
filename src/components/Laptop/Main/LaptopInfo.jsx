@@ -45,6 +45,8 @@ export default function LaptopInfo() {
   async function Delete(e, id, serialNumber) {
     e.preventDefault();
     console.log("id", id);
+    const API_URL = import.meta.env.VITE_API_BASE_PORT;
+
     Swal.fire({
       title: `Cofirm to delete this item (S/N:${serialNumber} ) ?`,
       icon: "question",
@@ -52,7 +54,7 @@ export default function LaptopInfo() {
     }).then((res) => {
       if (res.isConfirmed) {
         axios
-          .delete(`http://192.168.0.145:8080/api/laptops/${id}`)
+          .delete(`${API_URL}/api/laptops/${id}`)
           .then((res) => {
             console.log(res);
             Swal.fire({
@@ -108,7 +110,7 @@ export default function LaptopInfo() {
               className="mt-4 text-yellow-400 cursor-pointer"
               onClick={() =>
                 handleImageClick(
-                  `http://192.168.0.145:8080/uploads/${params.value}`
+                  `http://localhost:8000/uploads/${params.value}`
                 )
               }
             />

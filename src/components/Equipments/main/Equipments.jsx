@@ -47,16 +47,14 @@ function Equipments() {
       showCancelButton: true,
     }).then((res) => {
       if (res.isConfirmed) {
-        axios
-          .delete(`http://192.168.0.145:8080/api/borrows/${id}`)
-          .then((res) => {
-            console.log(res);
-            Swal.fire({
-              title: "Deleted Successfully",
-              icon: "success",
-            });
-            getDataAll();
+        axios.delete(`${API_URL}/borrows/${id}`).then((res) => {
+          console.log(res);
+          Swal.fire({
+            title: "Deleted Successfully",
+            icon: "success",
           });
+          getDataAll();
+        });
       }
     });
   }
