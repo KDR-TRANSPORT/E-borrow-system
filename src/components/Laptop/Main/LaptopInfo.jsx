@@ -54,7 +54,7 @@ export default function LaptopInfo() {
     }).then((res) => {
       if (res.isConfirmed) {
         axios
-          .delete(`${API_URL}/api/laptops/${id}`)
+          .delete(`${API_URL}/laptops/${id}`)
           .then((res) => {
             console.log(res);
             Swal.fire({
