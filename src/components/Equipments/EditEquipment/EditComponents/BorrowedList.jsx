@@ -370,7 +370,7 @@ export default function BorrowedList({
           <>
             <div
               key={idx}
-              className="grid grid-cols-[25%_25%_40%]  space-x-10 "
+              className="grid grid-cols-[17.5%_25%_40%]  space-x-10 "
             >
               <div className="flex items-center ">
                 {editId === item.id && isEditing ? (
