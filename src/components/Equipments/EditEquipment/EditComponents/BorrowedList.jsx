@@ -266,36 +266,31 @@ export default function BorrowedList({
 
   const editBorrowedDevices = async (e, item) => {
     console.log(item);
-    const { id, device_name, return_status, laptop_id } = item;
-
-    // Check if the serial number exists in the laptop API
-    try {
-      if (laptop_id && !laptopSerialNumbers.includes(serialNumber)) {
-        Swal.fire({
-          title: `เลข S/N (${serialNumber}) ไม่ตรงกับในระบบ`,
-          icon: "error",
-        });
-        return; // Exit function if serial number doesn't match
-      }
-    } catch (error) {
-      console.error("Error fetching laptop serial numbers:", error);
-      Swal.fire({
-        title: "เกิดข้อผิดพลาด",
-        text: "ไม่สามารถตรวจสอบเลข S/N ได้ในขณะนี้",
-        icon: "error",
-      });
-      return; // Exit function on error
-    }
-
+  
+    const { id, device_name, return_status } = item;
+  
     // Prepare the submit data
     const submitData = {
       id: id,
-      serial_number: serialNumber || serial_number,
+      serial_number: serialNumber ,
       device_name: deviceName || device_name,
       return_status: return_status,
       return_date: returnedDate,
     };
-
+  
+    const isLaptop = device_name.toLowerCase().includes("laptop");
+    const isSerialNumberValid = isLaptop
+      ? laptopSerialNumbers.includes(serialNumber)
+      : true;
+  
+    if (isLaptop && !isSerialNumberValid) {
+      Swal.fire({
+        title: `เลข S/N (${serialNumber}) ไม่ตรงกับในระบบ`,
+        icon: "error",
+      });
+      return;
+    }
+  
     try {
       const response = await axios.put(
         `http://192.168.0.145:8080/api/borrowdevicearrays`,
@@ -308,7 +303,6 @@ export default function BorrowedList({
       });
       await getSingleData();
       await getMarkedData();
-
       setIsEditing(false);
       // Clear inputs after submitting
       setInputs([]);
@@ -316,6 +310,7 @@ export default function BorrowedList({
       console.error("Error submitting data:", error);
     }
   };
+  
 
   const handleEditClick = async (e, itemId, serialNumber) => {
     e.preventDefault();
@@ -344,6 +339,8 @@ export default function BorrowedList({
       }
     });
   };
+
+  console.log("markedData",markedData);
 
   return (
     <div>

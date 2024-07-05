@@ -20,7 +20,7 @@ function Equipments() {
   async function getDataAll() {
     try {
       getEquipmentsData().then((response) => {
-        console.log('res',response);
+        console.log("res", response);
         setAlldataAll(response.data.data);
       });
       setIsLoading(false);
@@ -48,14 +48,16 @@ function Equipments() {
       showCancelButton: true,
     }).then((res) => {
       if (res.isConfirmed) {
-        axios.delete(`${API_URL}/borrows/${id}`).then((res) => {
-          console.log(res);
-          Swal.fire({
-            title: "Deleted Successfully",
-            icon: "success",
+        axios
+          .delete(`http://192.168.0.145:8080/api/borrows/${id}`)
+          .then((res) => {
+            console.log(res);
+            Swal.fire({
+              title: "Deleted Successfully",
+              icon: "success",
+            });
+            getDataAll();
           });
-          getDataAll();
-        });
       }
     });
   }

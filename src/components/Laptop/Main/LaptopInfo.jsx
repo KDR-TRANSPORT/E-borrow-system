@@ -19,7 +19,10 @@ export default function LaptopInfo() {
   const [allDataAll, setAlldataAll] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [borrowedItems, setBorrowedItems] = useState([null]);
+
   const navigate = useNavigate();
+
   async function getDataAll() {
     try {
       getLabtopsData().then((response) => {
@@ -35,8 +38,23 @@ export default function LaptopInfo() {
   useEffect(() => {
     setIsLoading(true);
     getDataAll();
+
+    getBorrowedInfo();
   }, []);
 
+  const getBorrowedInfo = async () => {
+    try {
+      const laptopResponse = await axios.get(
+        "http://192.168.0.145:8080/api/borrows"
+      );
+      console.log("laptopResponse", laptopResponse.data.data);
+      setBorrowedItems(laptopResponse.data.data);
+    } catch (error) {
+      console.error("Error fetching laptop information:", error);
+      // Handle error or show an alert here
+    }
+  };
+  console.log("borrowedItems", borrowedItems);
   const handleImageClick = (imageURL) => {
     setSelectedImage(imageURL);
     // แสดง modal ที่นี่
@@ -45,32 +63,42 @@ export default function LaptopInfo() {
   async function Delete(e, id, serialNumber) {
     e.preventDefault();
     console.log("id", id);
-    const API_URL = import.meta.env.VITE_API_BASE_PORT;
-
-    Swal.fire({
-      title: `Cofirm to delete this item (S/N:${serialNumber} ) ?`,
-      icon: "question",
-      showCancelButton: true,
-    }).then((res) => {
-      if (res.isConfirmed) {
-        axios
-          .delete(`${API_URL}/laptops/${id}`)
-          .then((res) => {
-            console.log(res);
-            Swal.fire({
-              title: "Deleted Successfully",
-              icon: "success",
+    const hasLaptopBorrowed = borrowedItems.find(
+      (item) => item.laptop_id === id
+    );
+    console.log("hasLaptopBorrowed", hasLaptopBorrowed);
+    if (hasLaptopBorrowed) {
+      Swal.fire({
+        title: "กรุณาลบข้อมูลที่ถูกยืมก่อน",
+        icon: "error",
+      });
+    } else {
+      const API_URL = import.meta.env.VITE_API_BASE_PORT;
+      Swal.fire({
+        title: `Cofirm to delete this item (S/N:${serialNumber} ) ?`,
+        icon: "question",
+        showCancelButton: true,
+      }).then((res) => {
+        if (res.isConfirmed) {
+          axios
+            .delete(`${API_URL}/laptops/${id}`)
+            .then((res) => {
+              console.log(res);
+              Swal.fire({
+                title: "Deleted Successfully",
+                icon: "success",
+              });
+              getDataAll();
+            })
+            .catch((res) => {
+              Swal.fire({
+                title: "Unable to delete",
+                icon: "error",
+              });
             });
-            getDataAll();
-          })
-          .catch((res) => {
-            Swal.fire({
-              title: "Unable to delete",
-              icon: "error",
-            });
-          });
-      }
-    });
+        }
+      });
+    }
   }
 
   const handleEdit = (e, id) => {
@@ -178,13 +206,13 @@ export default function LaptopInfo() {
                 onClick={(e) => handleEdit(e, params.id)}
               />
             </Link>
-            <Link href="#">
+            {/* <Link href="#">
               <RiDeleteBin6Line
                 className="text-red-400"
                 size={18}
                 onClick={(e) => Delete(e, params.id, params.row.serial_number)}
               />
-            </Link>
+            </Link> */}
           </div>
         );
       },
