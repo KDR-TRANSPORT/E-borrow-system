@@ -106,6 +106,8 @@ const styles = StyleSheet.create({
     minHeight: "20px",
     textAlign: "center", // จัดตำแหน่งข้อความให้อยู่กึ่งกลาง
     paddingTop: "5px",
+    fontSize: "9px",
+
     wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
   tableBodyCell: {
