@@ -79,16 +79,16 @@ export default function LaptopInfo() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "id", headerName: "ลำดับ", width: 100 },
     {
       field: "serial_number",
-      headerName: "หมายเลขเครื่อว",
+      headerName: "หมายเลขเครื่อง",
       width: 140,
       editable: false,
     },
     {
       field: "created_at",
-      headerName: "วันที่สร้าง",
+      headerName: "วันที่ทดสอบ",
       width: 110,
       editable: false,
       valueGetter: (params) => {
@@ -110,7 +110,7 @@ export default function LaptopInfo() {
               className="mt-4 text-yellow-400 cursor-pointer"
               onClick={() =>
                 handleImageClick(
-                  `http://localhost:8000/uploads/${params.value}`
+                  `http://192.168.0.145:8080/uploads/${params.value}`
                 )
               }
             />
@@ -149,7 +149,6 @@ export default function LaptopInfo() {
       width: 140,
       editable: false,
     },
-
     {
       field: "spec",
       headerName: "สเปคเครื่อง",

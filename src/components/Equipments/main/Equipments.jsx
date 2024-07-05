@@ -20,6 +20,7 @@ function Equipments() {
   async function getDataAll() {
     try {
       getEquipmentsData().then((response) => {
+        console.log('res',response);
         setAlldataAll(response.data.data);
       });
       setIsLoading(false);
@@ -60,7 +61,7 @@ function Equipments() {
   }
 
   const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "id", headerName: "ลำดับ", width: 100 },
     {
       field: "borrow_number_id",
       headerName: "No.",
@@ -118,7 +119,6 @@ function Equipments() {
         return dateValue ? dateValue.substring(0, 10) : ""; // ใช้ substring และตรวจสอบว่าค่าของ date ไม่ใช่ undefined หรือ null
       },
     },
-
     {
       field: "",
       headerName: "",

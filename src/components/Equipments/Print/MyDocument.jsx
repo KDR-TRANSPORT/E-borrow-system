@@ -1,6 +1,7 @@
 import React from "react";
-import fontAng from "./upceb.ttf";
-import moment from "moment/min/moment-with-locales";
+// import fontAng from "./upceb.ttf";
+
+import fontKanit from "./Kanit-Regular.ttf";
 import logoKdr from "./logoKdr.png";
 import {
   Document,
@@ -22,19 +23,22 @@ import {
 } from "@propra/react-pdf-table";
 import { Button } from "@mui/material";
 
-Font.register({ family: "fontAng", src: fontAng });
+Font.register({ family: "fontKanit", src: fontKanit });
 
 const styles = StyleSheet.create({
   page: {
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#E4E4E4",
-    fontFamily: "fontAng",
+    fontFamily: "fontKanit",
+    fontSize: "10px"
+
   },
   section: {
     marginHorizontal: 10,
     padding: 10,
     flexGrow: 1,
+
   },
   imageContainer: {
     display: "flex",
@@ -61,6 +65,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     marginRight: "50px",
     marginTop: "15px",
+
   },
   position: {
     textAlign: "right",
@@ -75,7 +80,7 @@ const styles = StyleSheet.create({
   place: {
     flexDirection: "row",
     marginTop: "15px",
-    marginLeft: "8px",
+    marginLeft: "55px",
   },
   box: {
     padding: "5px",
@@ -99,17 +104,15 @@ const styles = StyleSheet.create({
   },
   tableHeaderCell: {
     minHeight: "20px",
-
     textAlign: "center", // จัดตำแหน่งข้อความให้อยู่กึ่งกลาง
     paddingTop: "5px",
-    fontSize: "10px",
     wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
   tableBodyCell: {
     minHeight: "20px",
     paddingTop: "5px",
     textAlign: "center",
-    fontSize: "10px",
+    fontSize: "11px",
     wordBreak: "break-all", // เพิ่ม line นี้เข้าไป
   },
 
@@ -240,17 +243,17 @@ const MyDoc = ({ markedData }) => {
             <Image src={logoKdr} style={styles.image} />
           </View>
           <Text style={styles.title}>แบบฟอร์มยืม-คนอุปกรณ์คอมพิวเตอร์</Text>
-          <Text style={styles.date}>วันที่............................</Text>
+          <Text style={styles.date}>วันที่.................................................</Text>
           <Text style={styles.name}>
-            ชื่อ-นามสกุล..............................................................................
-            เบอร์โทรศัพท์.....................
+            ชื่อ-นามสกุล.......................................................................................................................
+            เบอร์โทรศัพท์.......................................................................
           </Text>
           <Text style={styles.position}>
-            ตำแหน่ง...............................................................
-            แผนก..................................................................
+            ตำแหน่ง..........................................................................................................
+            แผนก................................................................................................................
           </Text>
           <Text style={styles.purpose}>
-            มีความประสงค์จะขอยืมพัสดุเพื่อ.....................................................................................................
+            มีความประสงค์จะขอยืมพัสดุเพื่อ...................................................................................................................................................................................
           </Text>
           <View style={styles.place}>
             <Text>สถานที่ใช้งาน </Text>
@@ -260,7 +263,7 @@ const MyDoc = ({ markedData }) => {
             <Text>สำนักงานลาซาลล</Text>
             <Text style={styles.box}></Text>
             <Text>
-              อื่นๆ.....................................................
+              อื่นๆ.....................................................................................................
             </Text>
           </View>
           <View style={styles.tableContainer}>
@@ -286,7 +289,12 @@ const MyDoc = ({ markedData }) => {
                   />
                   <DataTableCell
                     style={styles.tableBodyCell}
-                    getContent={(r) => r.serial_number}
+                    getContent={(r) => (
+                      <Text>
+                        {r.serial_number}
+                        {r.laptop_id ? ` (${r.laptop_id})` : ""}
+                      </Text>
+                    )}
                   />
                   <DataTableCell
                     style={styles.tableBodyCell}
@@ -323,7 +331,12 @@ const MyDoc = ({ markedData }) => {
                   />
                   <DataTableCell
                     style={styles.tableBodyCell}
-                    getContent={(r) => r.serial_number}
+                    getContent={(r) => (
+                      <Text>
+                        {r.serial_number}
+                        {r.laptop_id ? ` (${r.laptop_id})` : ""}
+                      </Text>
+                    )}
                   />
                   <DataTableCell
                     style={styles.tableBodyCell}

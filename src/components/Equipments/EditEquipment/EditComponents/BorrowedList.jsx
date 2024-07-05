@@ -17,6 +17,8 @@ import SaveAsIcon from "@mui/icons-material/SaveAs";
 import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 export default function BorrowedList({
   markedData,
   getMarkedData,
@@ -28,19 +30,12 @@ export default function BorrowedList({
   const [newItems, setNewItems] = useState([]);
   const [deviceName, setDeviceName] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
-  const [inputs, setInputs] = useState([
-    // {
-    //   device_name: "",
-    //   serial_number: "",
-    //   return_status: false,
-    //   borrow_id: Number(id),
-    // },
-  ]);
+  const [inputs, setInputs] = useState([]);
   const [returnedDate, setReturnedDate] = useState("");
   const [editId, setEditID] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
-  const [returnStatus, setReturnStatus] = useState(null);
+  const [laptopSerialNumbers, setLaptopSerialNumbers] = useState([]);
 
   useEffect(() => {
     const getCurrentDate = () => {
@@ -52,8 +47,25 @@ export default function BorrowedList({
     };
     setReturnedDate(getCurrentDate());
     setCurrentDate(getCurrentDate());
+
+    getLaptopsInfo();
   }, []);
 
+  const getLaptopsInfo = async () => {
+    try {
+      const laptopResponse = await axios.get(
+        "http://192.168.0.145:8080/api/laptops"
+      );
+      const serialNumbers = laptopResponse.data.data.map(
+        (laptop) => laptop.serial_number
+      );
+      setLaptopSerialNumbers(serialNumbers);
+      console.log("laptopSerialNumbers", laptopSerialNumbers);
+    } catch (error) {
+      console.error("Error fetching laptop information:", error);
+      // Handle error or show an alert here
+    }
+  };
   const handleAddInput = () => {
     setInputs([
       ...inputs,
@@ -97,9 +109,36 @@ export default function BorrowedList({
     };
   });
 
+  console.log("laptopSerialNumbers", laptopSerialNumbers);
+
   // เพิ่มช่องใหม่ 1 ช่อง
   const handleSubmit = async () => {
     setIsloading(true);
+
+    // ตรวจสอบว่า validatedInputs มี item ที่มี device_name.includes("laptop") ไหม
+    const hasLaptopDevice = validatedInputs.some((item) =>
+      item.device_name.toLowerCase().includes("laptop")
+    );
+
+    if (hasLaptopDevice) {
+      // ตรวจสอบว่า serial_number ตรงกับใน laptopSerialNumbers ไหม
+      const invalidLaptop = validatedInputs.find(
+        (item) =>
+          item.device_name.toLowerCase().includes("laptop") &&
+          !laptopSerialNumbers.includes(item.serial_number)
+      );
+
+      if (invalidLaptop) {
+        // แจ้งเตือนด้วย Swal
+        Swal.fire({
+          title: `เลข S/N (${invalidLaptop.serial_number}) ไม่ตรงกับในระบบ`,
+          icon: "error",
+        });
+        setIsloading(false);
+        return;
+      }
+    }
+
     try {
       const response = await axios.post(
         "http://192.168.0.145:8080/api/borrowdevicearrays",
@@ -116,7 +155,6 @@ export default function BorrowedList({
           borrow_id: id,
         },
       ]);
-      setInputs([]);
       getMarkedData();
       getSingleData();
       setIsloading(false);
@@ -223,9 +261,32 @@ export default function BorrowedList({
       console.error("Error submitting data:", error);
     }
   };
+  console.log("inputs", inputs);
+  console.log("serialNumber", serialNumber);
 
   const editBorrowedDevices = async (e, item) => {
-    const { id, device_name, return_status, serial_number } = item;
+    console.log(item);
+    const { id, device_name, return_status, laptop_id } = item;
+
+    // Check if the serial number exists in the laptop API
+    try {
+      if (laptop_id && !laptopSerialNumbers.includes(serialNumber)) {
+        Swal.fire({
+          title: `เลข S/N (${serialNumber}) ไม่ตรงกับในระบบ`,
+          icon: "error",
+        });
+        return; // Exit function if serial number doesn't match
+      }
+    } catch (error) {
+      console.error("Error fetching laptop serial numbers:", error);
+      Swal.fire({
+        title: "เกิดข้อผิดพลาด",
+        text: "ไม่สามารถตรวจสอบเลข S/N ได้ในขณะนี้",
+        icon: "error",
+      });
+      return; // Exit function on error
+    }
+
     // Prepare the submit data
     const submitData = {
       id: id,
@@ -235,14 +296,16 @@ export default function BorrowedList({
       return_date: returnedDate,
     };
 
-    console.log("submitData", submitData);
-
     try {
       const response = await axios.put(
         `http://192.168.0.145:8080/api/borrowdevicearrays`,
         [submitData]
       );
       console.log(response.data);
+      Swal.fire({
+        title: "แก้ไขสำเร็จ",
+        icon: "success",
+      });
       await getSingleData();
       await getMarkedData();
 
@@ -260,13 +323,26 @@ export default function BorrowedList({
     setEditID(itemId);
   };
 
-  // จัดการ datePickter
-  const handleChange = (value) => {
-    const year = value.$y;
-    const month = String(value.$M + 1).padStart(2, "0");
-    const day = String(value.$D).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-    setReturnedDate(formattedDate);
+  const deleteBorrowList = (e, id) => {
+    e.preventDefault();
+    Swal.fire({
+      title: `Cofirm to delete this item (S/N:${id} ) ?`,
+      icon: "question",
+      showCancelButton: true,
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .delete(`http://192.168.0.145:8080/api/borrowdevices/${id}`)
+          .then((res) => {
+            console.log(res);
+            Swal.fire({
+              title: "Deleted Successfully",
+              icon: "success",
+            });
+            getMarkedData();
+          });
+      }
+    });
   };
 
   return (
@@ -342,6 +418,7 @@ export default function BorrowedList({
                     <p className="text-wrap max-w-[300px] break-all">
                       {item.serial_number}
                     </p>
+                    {item?.laptop_id && <p>({item.laptop_id})</p>}
                   </div>
                 )}
               </div>
@@ -395,7 +472,7 @@ export default function BorrowedList({
                     </Button>
                   </div>
                 ) : (
-                  <div className="">
+                  <div className="flex items-center">
                     <Button
                       onClick={(e) => {
                         handleEditClick(e, item.id, item.serial_number);
@@ -408,6 +485,19 @@ export default function BorrowedList({
                       color="primary"
                     >
                       แก้ไข
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        deleteBorrowList(e, item.id, item.serial_number);
+                      }}
+                      startIcon={<DeleteIcon />}
+                      sx={{
+                        padding: 1,
+                        marginLeft: 1,
+                      }}
+                      color="warning"
+                    >
+                      ลบ
                     </Button>
                   </div>
                 )}
