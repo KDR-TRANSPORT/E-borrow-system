@@ -26,7 +26,7 @@ function AddEquipment() {
     employee_phone: "",
     employee_rank: "",
     employee_dept: "",
-    branch_id: null,
+    branch_name: "",
   });
 
   const handleSubmit = async (event) => {
@@ -62,23 +62,18 @@ function AddEquipment() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "branch_id") {
-      setFormData({
-        ...formData,
-        [name]: Number(value),
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
+
   const handleDateChange = (formattedDate) => {
     setFormData({ ...formData, date: formattedDate });
   };
 
-  console.log('form',formData);
+  console.log("form", formData);
   return (
     <div className="mx-16">
       <h1 className="text-2xl font-bold my-6">เพิ่มอุปกรณ์</h1>
@@ -111,10 +106,7 @@ function AddEquipment() {
           </div>
           <div className="flex space-x-24">
             {" "}
-            <EmployeeBranchId
-              value={formData.branch_id}
-              onChange={handleChange}
-            />
+            <EmployeeBranchId value={formData.branch} onChange={handleChange} />
           </div>
         </div>
         <hr className="mb-6" />

@@ -8,7 +8,7 @@ function EmployeePhone({ value, onChange }) {
   return (
     <div className="relative">
       <h1 className="font-semibold text-sm  absolute -top-6 left-1">
-    มือถือ
+    เบอร์โทร
       </h1>
       <TextField
         id="standard-basic"

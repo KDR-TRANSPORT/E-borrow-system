@@ -5,14 +5,16 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 function EmployeeBranchId({ value, onChange }) {
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedBranch, setSelectedBranch] = useState("");
 
   const handleChange = (e) => {
     const newValue = e.target.value;
-    console.log('newValue',newValue);
-    setSelectedValue(newValue);
+    console.log("newValue", newValue);
+    setSelectedBranch(newValue);
     onChange(e);
   };
+
+  console.log("dasd", selectedBranch);
   return (
     <div className="relative mt-2">
       <h1 className="font-semibold text-sm  absolute -top-6 left-1">
@@ -22,37 +24,45 @@ function EmployeeBranchId({ value, onChange }) {
         <FormControlLabel
           control={
             <Checkbox
-              checked={selectedValue === "1"}
+              checked={selectedBranch === "สำนักงานใหญ่"}
               onChange={handleChange}
-              value={1}
-              name="branch_id"
+              value="สำนักงานใหญ่"
+              name="branch_name"
             />
           }
-          label="สาขา1"
+          label="สำนักงานใหญ่"
         />
         <FormControlLabel
           control={
             <Checkbox
-              checked={selectedValue === "2"}
+              checked={selectedBranch === "สำนักงานลาซาล"}
               onChange={handleChange}
-              value={2}
-              name="branch_id"
+              value="สำนักงานลาซาล"
+              name="branch_name"
             />
           }
-          label="สาขา2"
+          label="สำนักงานลาซาล"
         />
         <FormControlLabel
           control={
             <Checkbox
-              checked={selectedValue === "3"}
-              onChange={handleChange}
-              value={3}
-              name="branch_id"
-
+              value="อื่นๆ"
+              onChange={(e) => setSelectedBranch("อื่นๆ")}
+              name="branch_name"
+              checked={selectedBranch === "อื่นๆ"}
             />
           }
-          label="สาขา3"
+          label="อื่นๆ"
         />
+        {selectedBranch === "อื่นๆ" && (
+          <TextField
+            id="outlined-basic"
+            variant="standard"
+            name="branch_name"
+            onChange={(e) => onChange(e)}
+            disabled={selectedBranch !== "อื่นๆ"}
+          />
+        )}
       </FormGroup>
     </div>
   );
