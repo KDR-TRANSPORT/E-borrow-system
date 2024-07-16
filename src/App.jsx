@@ -21,7 +21,6 @@ function App() {
         {" "}
         <Route exact path="/login" element={<Login />}></Route>
         <Route path="*" element={<PageNotFound />} />
-
         <Route
           element={
             <ProtectedRoute>
