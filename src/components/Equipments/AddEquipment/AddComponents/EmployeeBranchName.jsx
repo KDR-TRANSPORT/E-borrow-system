@@ -4,7 +4,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-function EmployeeBranchId({ value, onChange }) {
+function EmployeeBranchName({ formData, onChange, setFormData }) {
   const [selectedBranch, setSelectedBranch] = useState("");
 
   const handleChange = (e) => {
@@ -47,7 +47,13 @@ function EmployeeBranchId({ value, onChange }) {
           control={
             <Checkbox
               value="อื่นๆ"
-              onChange={(e) => setSelectedBranch("อื่นๆ")}
+              onChange={(e) => {
+                setSelectedBranch("อื่นๆ");
+                setFormData({
+                  ...formData,
+                  branch_name: "",
+                });
+              }}
               name="branch_name"
               checked={selectedBranch === "อื่นๆ"}
             />
@@ -68,15 +74,5 @@ function EmployeeBranchId({ value, onChange }) {
   );
 }
 
-export default EmployeeBranchId;
+export default EmployeeBranchName;
 
-{
-  /* <TextField
-id="standard-basic"
-variant="outlined"
-size="small"
-name="branch_id"
-onChange={handleChange}
-type="number"
-/> */
-}

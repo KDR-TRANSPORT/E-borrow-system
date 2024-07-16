@@ -13,7 +13,7 @@ import EmployeeName from "./AddComponents/EmployeeName";
 import EmployeePhone from "./AddComponents/EmployeePhone";
 import EmployeeRank from "./AddComponents/EmployeeRank";
 import EmployeeDept from "./AddComponents/EmployeeDept";
-import EmployeeBranchId from "./AddComponents/EmployeeBranchId";
+import EmployeeBranchName from "./AddComponents/EmployeeBranchName";
 
 function AddEquipment() {
   const navigate = useNavigate();
@@ -32,6 +32,17 @@ function AddEquipment() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsloading(true);
+    const isEmpty = Object.values(formData).some((value) => value === "");
+    if (isEmpty) {
+      Swal.fire({
+        title: "Warning!",
+        text: "Please fill in all fields.",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      setIsloading(false);
+      return;
+    }
     try {
       addEquipmentsData(formData).then((res) => {
         console.log(res);
@@ -106,7 +117,11 @@ function AddEquipment() {
           </div>
           <div className="flex space-x-24">
             {" "}
-            <EmployeeBranchId value={formData.branch} onChange={handleChange} />
+            <EmployeeBranchName
+              formData={formData}
+              setFormData={setFormData}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <hr className="mb-6" />

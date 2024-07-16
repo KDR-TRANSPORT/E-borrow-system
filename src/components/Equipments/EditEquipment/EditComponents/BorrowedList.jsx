@@ -60,7 +60,6 @@ export default function BorrowedList({
         (laptop) => laptop.serial_number
       );
       setLaptopSerialNumbers(serialNumbers);
-      console.log("laptopSerialNumbers", laptopSerialNumbers);
     } catch (error) {
       console.error("Error fetching laptop information:", error);
       // Handle error or show an alert here
@@ -109,7 +108,6 @@ export default function BorrowedList({
     };
   });
 
-  console.log("laptopSerialNumbers", laptopSerialNumbers);
 
   // เพิ่มช่องใหม่ 1 ช่อง
   const handleSubmit = async () => {
@@ -261,8 +259,6 @@ export default function BorrowedList({
       console.error("Error submitting data:", error);
     }
   };
-  console.log("inputs", inputs);
-  console.log("serialNumber", serialNumber);
 
   const editBorrowedDevices = async (e, item) => {
     console.log(item);
@@ -340,7 +336,6 @@ export default function BorrowedList({
     });
   };
 
-  console.log("markedData",markedData);
 
   return (
     <div>

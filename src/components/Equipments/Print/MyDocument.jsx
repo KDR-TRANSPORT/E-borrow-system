@@ -422,7 +422,6 @@ const MyDoc = ({ markedData }) => {
 };
 
 export default function MyDocument({ markedData }) {
-  console.log("markedData", markedData);
   const markedDataWithIndex = markedData.map((item, idx) => ({
     ...item,
     index: idx + 1,

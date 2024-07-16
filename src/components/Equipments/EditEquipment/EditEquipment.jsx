@@ -11,7 +11,7 @@ import {
 } from "../functions/data";
 
 import DateEdit from "./EditComponents/DateEdit";
-import EmployeeBranchIdEdit from "./EditComponents/EmployeeBranchIdEdit";
+import EmployeeBranchNameEdit from "./EditComponents/EmployeeBranchNameEdit";
 import EmployeeDeptEdit from "./EditComponents/EmployeeDeptEdit";
 import EmployeeIdEdit from "./EditComponents/EmployeeIdEdit";
 import EmployeeNameEdit from "./EditComponents/EmployeeNameEdit";
@@ -26,6 +26,7 @@ function EditEquipment() {
   const navigate = useNavigate();
   const [isLoading, setIsloading] = useState(false);
   const { id } = useParams();
+
   const [formData, setFormData] = useState({
     date: "",
     employee_id: "",
@@ -33,8 +34,10 @@ function EditEquipment() {
     employee_phone: "",
     employee_rank: "",
     employee_dept: "",
-    branch_id: null,
+    branch_name: "",
   });
+  const [selectedBranch, setSelectedBranch] = useState("");
+
   const [markedData, setMarkedData] = useState([
     {
       borrow_id: 1,
@@ -76,10 +79,11 @@ function EditEquipment() {
         employee_phone: res.data.data.employee_phone,
         employee_rank: res.data.data.employee_rank,
         employee_dept: res.data.data.employee_dept,
-        branch_id: res.data.data.branch_id,
+        branch_name: res.data.data.branch_name,
       }));
     });
   };
+
   const getMarkedData = () => {
     setIsloading(true);
     getMarkedEquipmentData(id)
@@ -98,9 +102,34 @@ function EditEquipment() {
     getMarkedData();
   }, []);
 
+  useEffect(() => {
+    if (
+      formData.branch_name === "สำนักงานใหญ่" ||
+      formData.branch_name === "สำนักงานลาซาล"
+    ) {
+      setSelectedBranch(formData.branch_name);
+      console.log("selectedBranch2", selectedBranch);
+    } else {
+      setSelectedBranch("อื่นๆ");
+
+      console.log("selectedBranch2", selectedBranch);
+    }
+  }, [formData.branch_name]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsloading(true);
+    const isEmpty = Object.values(formData).some((value) => value === "");
+    if (isEmpty) {
+      Swal.fire({
+        title: "Warning!",
+        text: "Please fill in all fields.",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      setIsloading(false);
+      return;
+    }
     try {
       editEquipmentsData(formData, id).then((res) => {
         console.log(res);
@@ -130,20 +159,12 @@ function EditEquipment() {
   };
 
   const handleChange = (e) => {
-    console.log("xxxxxxx", typeof formData.branch_id);
-
     const { name, value } = e.target;
-    if (name === "branch_id") {
-      setFormData({
-        ...formData,
-        [name]: Number(value),
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleDateChange = (formattedDate) => {
@@ -191,9 +212,12 @@ function EditEquipment() {
           </div>
           <div className="flex space-x-24">
             {" "}
-            <EmployeeBranchIdEdit
-              value={formData.branch_id}
+            <EmployeeBranchNameEdit
+              formData={formData}
+              setFormData={setFormData}
               onChange={handleChange}
+              selectedBranch={selectedBranch}
+              setSelectedBranch={setSelectedBranch}
             />
           </div>
           <div>
