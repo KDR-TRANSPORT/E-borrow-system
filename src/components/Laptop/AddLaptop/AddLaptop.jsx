@@ -171,7 +171,6 @@ function AddLaptop() {
           </Link>
         </div>
       </form>
-      
     </div>
   );
 }
